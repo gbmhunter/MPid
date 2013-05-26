@@ -1,29 +1,11 @@
 //!
 //! @file 		Pid.h
-//! @author 	Geoffrey Hunter <gbmhunter@gmail.com>
+//! @author 	Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
 //! @edited 	n/a
-//! @date 		01/10/2012
+//! @date 		2012/10/01
 //! @brief 		Header file for Pid.c
 //! @details
-//!		<b>Last Modified:			</b> 15/10/2012					\n
-//!		<b>Version:					</b> v1.0.0						\n
-//!		<b>Company:					</b> CladLabs					\n
-//!		<b>Project:					</b> Free Code Libraries		\n
-//!		<b>Language:				</b> C							\n
-//!		<b>Compiler:				</b> GCC						\n
-//! 	<b>uC Model:				</b> PSoC5						\n
-//!		<b>Computer Architecture:	</b> ARM						\n
-//! 	<b>Operating System:		</b> FreeRTOS v7.2.0			\n
-//!		<b>Documentation Format:	</b> Doxygen					\n
-//!		<b>License:					</b> OLP						\n
-//!
-//!
-//! Since all parameters are passed in by sturcture pointer into PID controller functions,
-//!	this file can work with as many seperate PID control loops as you wish.
-//!
-//! Can use either fixed-points (recommended for high-speed operation) or doubles 
-//! (recommended for non time critical alogirhtms.
-//!
+//!				See README.rst
 
 
 
