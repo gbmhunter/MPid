@@ -5,7 +5,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/05/27
-- Version: v1.1.0.0
+- Version: v2.0.0.1
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -23,8 +23,11 @@ A light-weight, fast PID library designed for use
 on embedded systems (but can also run on any machine which has
 a G++ compiler).
 
-Can use either fixed-points (recommended for high-speed operation) or doubles 
-(recommended for non-time critical algorithms).
+For better performance and control, the PID library supports a generic number type. Number type must support casting
+to doubles. Fixed-point numbers are recommended for high-speed operation, doubles 
+are recommended for non-time critical algorithms.
+
+Relys on used calling Pid.Run() at a regular and fixed interval (usually in the milli-second range, via an interrupt).
 
 Automatically adjusts Kp, Ki and Kd depending on the chosen time step (Zp, Zi, and Zd are the time-step adjusted values).
 
@@ -51,7 +54,7 @@ External Dependencies
 Usage
 =====
 
-::
+:::c++
 
 	PidDbl pidTest;
 	
@@ -68,4 +71,6 @@ Changelog
 
 - v1.0.0.0 		-> (2012/10/01) Initial commit.
 - v1.0.0.1		-> (2013/05/27) Added README.rst.
-- v1.1.0.0		-> (2013/05/27) Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->").
+- v1.1.0.0		-> (2013/05/27) Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->"). Prevented derivative control for influencing the output until at least two calls to Run() have been made (i.e. doesn't assume previous input was 0.0 on first call to Run()).
+- v2.0.0.0		-> (2013/05/27) Added support for PID control of any data type by making PID class and functions templates. 
+- v2.0.0.1		-> (2013/05/27) Changed README.rst to README.md (to markdown format).
