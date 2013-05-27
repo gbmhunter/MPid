@@ -54,7 +54,7 @@ External Dependencies
 Usage
 =====
 
-::
+:::c++
 
 	PidDbl pidTest;
 	
