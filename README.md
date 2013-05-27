@@ -5,7 +5,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/05/27
-- Version: v2.0.0.1
+- Version: v2.0.0.3
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -73,4 +73,6 @@ Changelog
 - v1.0.0.1		-> (2013/05/27) Added README.rst.
 - v1.1.0.0		-> (2013/05/27) Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->"). Prevented derivative control for influencing the output until at least two calls to Run() have been made (i.e. doesn't assume previous input was 0.0 on first call to Run()).
 - v2.0.0.0		-> (2013/05/27) Added support for PID control of any data type by making PID class and functions templates. 
-- v2.0.0.1		-> (2013/05/27) Changed README.rst to README.md (to markdown format).
+- v2.0.0.1		-> (2013/05/27) Fixed commit issues, removed .goutstream files.
+- v2.0.0.2		-> (2013/05/27) Changed README.rst to README.md (to markdown format).
+- v2.0.0.3		-> (2013/05/27) Fixed version numbers.
