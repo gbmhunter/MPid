@@ -220,14 +220,9 @@ namespace Pid
 			double error;				//!< The error between the set-point and actual output (set point - output, positive
 											//!< when actual output is lagging set-point
 			
-			//! @brief 		The output value calculated the previous time Pid_Run() was called.
-			//! @details	Used in ACCUMULATE_OUTPUT mode.
-			double prevOutput;		
-
-			//! @brief		The sample period (in milliseconds) between successive Pid_Run() calls.
-			//! @details	The constants with the z prefix are scaled according to this value.
-			double samplePeriodMs;	
-											
+			double prevOutput;		//!< The output value calculated the previous time Pid_Run() was called
+			double samplePeriodMs;	//!< The sample period (in milliseconds) between successive Pid_Run() calls.
+											//!< The constants with the z prefix are scaled according to this value.
 			double pTerm;				//!< The proportional term that is summed as part of the output (calculated in Pid_Run())
 			double iTerm;				//!< The integral term that is summed as part of the output (calculated in Pid_Run())
 			double dTerm;				//!< The derivative term that is summed as part of the output (calculated in Pid_Run())

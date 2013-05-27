@@ -1,0 +1,16 @@
+#include "../src/include/Pid/hpp"
+
+// UnitTest++ library
+#include "UnitTest++/src/UnitTest++.h"
+
+using namespace Pid;
+
+TEST(BasicTest)
+{
+	PidFp pidTest;
+}
+
+int main()
+{
+
+}

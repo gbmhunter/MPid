@@ -26,8 +26,6 @@ a G++ compiler).
 Can use either fixed-points (recommended for high-speed operation) or doubles 
 (recommended for non-time critical algorithms).
 
-Relys on used calling Pid.Run() at a regular and fixed interval (usually in the milli-second range, via an interrupt).
-
 Automatically adjusts Kp, Ki and Kd depending on the chosen time step (Zp, Zi, and Zd are the time-step adjusted values).
 
 DO NOT try and make Kp, Ki, or Kd negative. This results in undefined behaviour.
@@ -70,4 +68,4 @@ Changelog
 
 - v1.0.0.0 		-> (2012/10/01) Initial commit.
 - v1.0.0.1		-> (2013/05/27) Added README.rst.
-- v1.1.0.0		-> (2013/05/27) Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->"). Prevented derivative control for influencing the output until at least two calls to Run() have been made (i.e. doesn't assume previous input was 0.0 on first call to Run()).
+- v1.1.0.0		-> (2013/05/27) Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->").

@@ -16,6 +16,10 @@
 	#error Please build with C++ compiler
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //===============================================================================================//
 //========================================= INCLUDES ============================================//
 //===============================================================================================//
@@ -38,7 +42,9 @@
 //================================== PRECOMPILER CHECKS =========================================//
 //===============================================================================================//
 
-
+#ifndef configPRINT_DEBUG_PID
+	#error Please define the switch configPRINT_DEBUG_PID
+#endif
 
 //===============================================================================================//
 //======================================== NAMESPACE ============================================//
@@ -51,28 +57,33 @@ namespace Pid
 		using namespace Fp;
 	#endif
 
+	#if(configPRINT_DEBUG_PID == 1)
+		char _debugBuff[100];
+	#endif
+
+
 	//===============================================================================================//
 	//================================= PUBLIC MEMBER METHODS =======================================//
 	//===============================================================================================//
 
 	#if(pidENABLE_FP_SUPPORT == 1)
-		void PidFp::Init(
-			fp<CDP> kp, fp<CDP> ki, fp<CDP> kd, 
-			ctrlDir_t controllerDir, outputMode_t outputMode, fp<CDP> samplePeriodMs, 
-			fp<CDP> minOutput, fp<CDP> maxOutput, fp<CDP> setPoint)
-		{
+	void PidFp::Init(
+		fp<CDP> kp, fp<CDP> ki, fp<CDP> kd, 
+		ctrlDir_t controllerDir, outputMode_t outputMode, fp<CDP> samplePeriodMs, 
+		fp<CDP> minOutput, fp<CDP> maxOutput, fp<CDP> setPoint)
+	{
 
-			SetOutputLimits(minOutput, maxOutput);		
+		SetOutputLimits(minOutput, maxOutput);		
 
-			 samplePeriodMs = samplePeriodMs;
+	    samplePeriodMs = samplePeriodMs;
 
-			 SetControllerDirection(controllerDir);
-			 SetTunings(kp, ki, kd);
-			setPoint = setPoint;
-			prevInput = (int32_t)0;
-			prevOutput = (int32_t)0;
+	    SetControllerDirection(controllerDir);
+	    SetTunings(kp, ki, kd);
+		setPoint = setPoint;
+		prevInput = (int32_t)0;
+		prevOutput = (int32_t)0;
 			
-		}
+	}
 	#endif
 
 	void PidDbl::Init(
@@ -83,24 +94,17 @@ namespace Pid
 
 		SetOutputLimits(minOutput, maxOutput);		
 
-		this->samplePeriodMs = samplePeriodMs;
+	    samplePeriodMs = samplePeriodMs;
 
-	   SetControllerDirection(controllerDir);
+	    SetControllerDirection(controllerDir);
 		outputMode = outputMode;
-		
-		// Set tunings with provided constants
-	   SetTunings(kp, ki, kd);
+	    SetTunings(kp, ki, kd);
 		setPoint = setPoint;
 		prevInput = 0;
 		prevOutput = 0;
-
-		pTerm = 0.0;
-		iTerm = 0.0;
-		dTerm = 0.0;
 			
 	}
 
-	#if(pidENABLE_FP_SUPPORT == 1)
 	void PidFp::Run(fp<CDP> input)
 	{
 		// Compute all the working error variables
@@ -141,7 +145,7 @@ namespace Pid
 		prevOutput = output;
 		 
 	}
-	#endif	// #if(pidENABLE_FP_SUPPORT == 1)
+
 
 	void PidDbl::Run(double input)
 	{
@@ -159,14 +163,8 @@ namespace Pid
 		else if(iTerm < outMin)
 			iTerm = outMin;
 
-		// DERIVATIVE CALS
-
-		// Only calculate derivative if run once or more already.
-		if(numTimesRan > 0)
-		{
-			inputChange = (input - prevInput);
-			dTerm = -zKd*inputChange;
-		}
+		inputChange = (input - prevInput);
+		dTerm = -zKd*inputChange;
 
 		// Compute PID Output. Value depends on outputMode
 		if(outputMode == DONT_ACCUMULATE_OUTPUT)
@@ -189,12 +187,8 @@ namespace Pid
 		// Remember last output for next call
 		prevOutput = output;
 		  
-		// Increment the Run() counter.
-		if(numTimesRan < 2^32-1)
-			numTimesRan++;
 	}
 
-	#if(pidENABLE_FP_SUPPORT == 1)
 	void PidFp::SetTunings(fp<CDP> kp, fp<CDP> ki, fp<CDP> kd)
 	{
 	   	if (kp < (int32_t)0 || ki < (int32_t)0 || kd < (int32_t)0) 
@@ -231,7 +225,7 @@ namespace Pid
 			UartDebug::PutString("PID: Tuning parameters set.\r\n");
 		#endif
 	}
-	#endif	// #if(pidENABLE_FP_SUPPORT == 1)
+
 	
 	void PidDbl::SetTunings(double kp, double ki, double kd)
 	{
@@ -242,10 +236,12 @@ namespace Pid
 		actualKi = ki;
 		actualKd = kd;
 	   
+	   double sampleTimeInSec = ((double)samplePeriodMs)/1000.0;  
+	   
 	   // Calculate time-step-scaled PID terms
 	   zKp = kp;
-	   zKi = ki * (samplePeriodMs/1000.0);
-	   zKd = kd / (samplePeriodMs/1000.0);
+	   zKi = ki * sampleTimeInSec;
+	   zKd = kd / sampleTimeInSec;
 	 
 	  if(controllerDir == PID_REVERSE)
 	   {
@@ -253,51 +249,8 @@ namespace Pid
 	      zKi = (0 - zKi);
 	      zKd = (0 - zKd);
 	   }
-
-		#if(pidPRINT_DEBUG == 1)
-			snprintf(debugBuff, 
-				sizeof(debugBuff),
-				"PID: Tuning parameters set. Kp = %.1f, Ki = %.1f, Kd = %f.1, Zp = %.1f, Zi = %.1f, Zd = %.1f, with sample period = %.1fms\r\n",
-				actualKp,
-				actualKi,
-				actualKd,
-				zKp,
-				zKi,
-				zKd,
-				samplePeriodMs);
-			PrintDebug(debugBuff);
-		#endif
 	}
 
-	double PidDbl::GetKp()
-	{
-		return actualKp;
-	}
-
-	double PidDbl::GetKi()
-	{
-		return actualKi;
-	}
-
-	double PidDbl::GetKd()
-	{
-		return actualKd;
-	}
-
-	double PidDbl::GetZp()
-	{
-		return zKp;
-	}
-
-	double PidDbl::GetZi()
-	{
-		return zKi;
-	}
-
-	double PidDbl::GetZd()
-	{
-		return zKd;
-	}
 	
 	void PidDbl::SetSamplePeriod(uint32_t newSamplePeriodMs)
 	{
@@ -311,7 +264,6 @@ namespace Pid
 	   }
 	}
 	 
-	#if(pidENABLE_FP_SUPPORT == 1)
 	void PidFp::SetOutputLimits(fp<CDP> min, fp<CDP> max)
 	{
 		if(min >= max) 
@@ -320,7 +272,6 @@ namespace Pid
 	   	outMax = max;
 	 
 	}
-	#endif
 	 
 	void PidDbl::SetOutputLimits(double min, double max)
 	{
@@ -331,7 +282,7 @@ namespace Pid
 	 
 	}
 
-	#if(pidENABLE_FP_SUPPORT == 1)
+	
 	void PidFp::SetControllerDirection(ctrlDir_t controllerDir)
 	{
 		if(controllerDir != controllerDir)
@@ -343,7 +294,7 @@ namespace Pid
 		}   
 	   controllerDir = controllerDir;
 	}
-	#endif	// #if(pidENABLE_FP_SUPPORT == 1)
+
 	
 	void PidDbl::SetControllerDirection(ctrlDir_t controllerDir)
 	{
@@ -356,14 +307,6 @@ namespace Pid
 		}   
 	   controllerDir = controllerDir;
 	}
-
-	void PidDbl::PrintDebug(const char* msg)
-	{
-		#if(__linux)
-			printf(msg);
-		#endif
-	}
-
 } // namespace Pid
 
 // EOF

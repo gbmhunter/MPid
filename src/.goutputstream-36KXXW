@@ -16,6 +16,10 @@
 	#error Please build with C++ compiler
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //===============================================================================================//
 //========================================= INCLUDES ============================================//
 //===============================================================================================//
@@ -38,7 +42,9 @@
 //================================== PRECOMPILER CHECKS =========================================//
 //===============================================================================================//
 
-
+#ifndef configPRINT_DEBUG_PID
+	#error Please define the switch configPRINT_DEBUG_PID
+#endif
 
 //===============================================================================================//
 //======================================== NAMESPACE ============================================//
@@ -50,6 +56,11 @@ namespace Pid
 	#if(pidENABLE_FP_SUPPORT == 1)
 		using namespace Fp;
 	#endif
+
+	#if(configPRINT_DEBUG_PID == 1)
+		char _debugBuff[100];
+	#endif
+
 
 	//===============================================================================================//
 	//================================= PUBLIC MEMBER METHODS =======================================//
@@ -83,20 +94,14 @@ namespace Pid
 
 		SetOutputLimits(minOutput, maxOutput);		
 
-		this->samplePeriodMs = samplePeriodMs;
+	    samplePeriodMs = samplePeriodMs;
 
-	   SetControllerDirection(controllerDir);
+	    SetControllerDirection(controllerDir);
 		outputMode = outputMode;
-		
-		// Set tunings with provided constants
-	   SetTunings(kp, ki, kd);
+	    SetTunings(kp, ki, kd);
 		setPoint = setPoint;
 		prevInput = 0;
 		prevOutput = 0;
-
-		pTerm = 0.0;
-		iTerm = 0.0;
-		dTerm = 0.0;
 			
 	}
 
@@ -159,14 +164,8 @@ namespace Pid
 		else if(iTerm < outMin)
 			iTerm = outMin;
 
-		// DERIVATIVE CALS
-
-		// Only calculate derivative if run once or more already.
-		if(numTimesRan > 0)
-		{
-			inputChange = (input - prevInput);
-			dTerm = -zKd*inputChange;
-		}
+		inputChange = (input - prevInput);
+		dTerm = -zKd*inputChange;
 
 		// Compute PID Output. Value depends on outputMode
 		if(outputMode == DONT_ACCUMULATE_OUTPUT)
@@ -189,9 +188,6 @@ namespace Pid
 		// Remember last output for next call
 		prevOutput = output;
 		  
-		// Increment the Run() counter.
-		if(numTimesRan < 2^32-1)
-			numTimesRan++;
 	}
 
 	#if(pidENABLE_FP_SUPPORT == 1)
@@ -242,10 +238,12 @@ namespace Pid
 		actualKi = ki;
 		actualKd = kd;
 	   
+	   double sampleTimeInSec = ((double)samplePeriodMs)/1000.0;  
+	   
 	   // Calculate time-step-scaled PID terms
 	   zKp = kp;
-	   zKi = ki * (samplePeriodMs/1000.0);
-	   zKd = kd / (samplePeriodMs/1000.0);
+	   zKi = ki * sampleTimeInSec;
+	   zKd = kd / sampleTimeInSec;
 	 
 	  if(controllerDir == PID_REVERSE)
 	   {
@@ -253,51 +251,8 @@ namespace Pid
 	      zKi = (0 - zKi);
 	      zKd = (0 - zKd);
 	   }
-
-		#if(pidPRINT_DEBUG == 1)
-			snprintf(debugBuff, 
-				sizeof(debugBuff),
-				"PID: Tuning parameters set. Kp = %.1f, Ki = %.1f, Kd = %f.1, Zp = %.1f, Zi = %.1f, Zd = %.1f, with sample period = %.1fms\r\n",
-				actualKp,
-				actualKi,
-				actualKd,
-				zKp,
-				zKi,
-				zKd,
-				samplePeriodMs);
-			PrintDebug(debugBuff);
-		#endif
 	}
 
-	double PidDbl::GetKp()
-	{
-		return actualKp;
-	}
-
-	double PidDbl::GetKi()
-	{
-		return actualKi;
-	}
-
-	double PidDbl::GetKd()
-	{
-		return actualKd;
-	}
-
-	double PidDbl::GetZp()
-	{
-		return zKp;
-	}
-
-	double PidDbl::GetZi()
-	{
-		return zKi;
-	}
-
-	double PidDbl::GetZd()
-	{
-		return zKd;
-	}
 	
 	void PidDbl::SetSamplePeriod(uint32_t newSamplePeriodMs)
 	{
@@ -356,14 +311,6 @@ namespace Pid
 		}   
 	   controllerDir = controllerDir;
 	}
-
-	void PidDbl::PrintDebug(const char* msg)
-	{
-		#if(__linux)
-			printf(msg);
-		#endif
-	}
-
 } // namespace Pid
 
 // EOF

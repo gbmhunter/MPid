@@ -26,14 +26,6 @@
 
 
 #define pidENABLE_FP_SUPPORT 0
-
-//! @brief		Set to 1 if you want debug information printed
-#define pidPRINT_DEBUG			1
-
-//! @brief		Size (in bytes) of the debug buffer (only valid if
-//!				pidPRINT_DEBUG is set to 1).
-#define pidDEBUG_BUFF_SIZE		200
-
 //===============================================================================================//
 //======================================== NAMESPACE ============================================//
 //===============================================================================================//
@@ -41,8 +33,6 @@
 #if(pidENABLE_FP_SUPPORT == 1)
 	#include "./FixedPoint/include/Fp.h"
 #endif
-
-#include <stdint.h>
 
 
 namespace Pid
@@ -123,13 +113,13 @@ namespace Pid
 			fp<CDP> setPoint;			//!< The set-point the PID control is trying to make the output converge to.
 			fp<CDP> error;				//!< The error between the set-point and actual output (set point - output, positive
 										//!< when actual output is lagging set-point
-			fp<CDP> output;				//!< The control output. This is updated when Pid_Run() is called
-			fp<CDP> prevOutput;			//!< The output value calculated the previous time Pid_Run was called
-			fp<CDP> samplePeriodMs;		//!< The sample period (in milliseconds) between successive Pid_Run() calls.
+			fp<CDP> output;				//!< The control output. This is updated when Pid_Go() is called
+			fp<CDP> prevOutput;			//!< The output value calculated the previous time Pid_Go was called
+			fp<CDP> samplePeriodMs;		//!< The sample period (in milliseconds) between successive Pid_Go() calls.
 										//!< The constants with the z prefix are scaled according to this value.
-			fp<CDP> pTerm;				//!< The proportional term that is summed as part of the output (calculated in Pid_Run())
-			fp<CDP> iTerm;				//!< The integral term that is summed as part of the output (calculated in Pid_Run())
-			fp<CDP> dTerm;				//!< The derivative term that is summed as part of the output (calculated in Pid_Run())
+			fp<CDP> pTerm;				//!< The proportional term that is summed as part of the output (calculated in Pid_Go())
+			fp<CDP> iTerm;				//!< The integral term that is summed as part of the output (calculated in Pid_Go())
+			fp<CDP> dTerm;				//!< The derivative term that is summed as part of the output (calculated in Pid_Go())
 			fp<CDP> outMin;				//!< The minimum output value. Anything lower will be limited to this floor.
 			fp<CDP> outMax;				//!< The maximum output value. Anything higher will be limited to this ceiling.
 	};	
@@ -165,34 +155,7 @@ namespace Pid
 			//! @details	It's called automatically from the init function, but tunings can also
 			//! 			be adjusted on the fly during normal operation
 			void SetTunings(double kp, double ki, double kd);
-
-			double GetKp();
-
-			double GetKi();
-
-			double GetKd();
-
-			double GetZp();
-
-			double GetZi();
-
-			double GetZd();
-
-			//! @brief		Prints debug information to the desired output
-			void PrintDebug(const char* msg);
-
-			//! @brief 		The set-point the PID control is trying to make the output converge to.
-			double setPoint;			
-
-			//! @brief		The control output. 
-			//! @details	This is updated when Pid_Run() is called.
-			double output;				
 		
-		private:
-			#if(pidPRINT_DEBUG == 1)
-				char debugBuff[pidDEBUG_BUFF_SIZE];
-			#endif
-
 			//! Time-step scaled proportional constant for quick calculation (equal to actualKp)
 			double zKp;		
 			
@@ -216,28 +179,18 @@ namespace Pid
 			
 			//! The change in input between the current and previous value
 			double inputChange;			
-	
+			double setPoint;			//!< The set-point the PID control is trying to make the output converge to.
 			double error;				//!< The error between the set-point and actual output (set point - output, positive
-											//!< when actual output is lagging set-point
-			
-			//! @brief 		The output value calculated the previous time Pid_Run() was called.
-			//! @details	Used in ACCUMULATE_OUTPUT mode.
-			double prevOutput;		
-
-			//! @brief		The sample period (in milliseconds) between successive Pid_Run() calls.
-			//! @details	The constants with the z prefix are scaled according to this value.
-			double samplePeriodMs;	
-											
-			double pTerm;				//!< The proportional term that is summed as part of the output (calculated in Pid_Run())
-			double iTerm;				//!< The integral term that is summed as part of the output (calculated in Pid_Run())
-			double dTerm;				//!< The derivative term that is summed as part of the output (calculated in Pid_Run())
+										//!< when actual output is lagging set-point
+			double output;				//!< The control output. This is updated when Pid_Go() is called
+			double prevOutput;			//!< The output value calculated the previous time Pid_Go was called
+			double samplePeriodMs;		//!< The sample period (in milliseconds) between successive Pid_Go() calls.
+										//!< The constants with the z prefix are scaled according to this value.
+			double pTerm;				//!< The proportional term that is summed as part of the output (calculated in Pid_Go())
+			double iTerm;				//!< The integral term that is summed as part of the output (calculated in Pid_Go())
+			double dTerm;				//!< The derivative term that is summed as part of the output (calculated in Pid_Go())
 			double outMin;				//!< The minimum output value. Anything lower will be limited to this floor.
 			double outMax;				//!< The maximum output value. Anything higher will be limited to this ceiling.	
-
-			//! @brief		Counts the number of times that Run() has be called. Used to stop
-			//!				derivative control from influencing the output on the first call.
-			//! @details	Safely stops counting once it reaches 2^32-1 (rather than overflowing). 
-			uint32_t numTimesRan;
 	};
 
 } // namespace Pid

@@ -94,9 +94,7 @@ namespace Pid
 		prevInput = 0;
 		prevOutput = 0;
 
-		pTerm = 0.0;
-		iTerm = 0.0;
-		dTerm = 0.0;
+		dTerm = 0;
 			
 	}
 
@@ -161,7 +159,6 @@ namespace Pid
 
 		// DERIVATIVE CALS
 
-		// Only calculate derivative if run once or more already.
 		if(numTimesRan > 0)
 		{
 			inputChange = (input - prevInput);
@@ -190,8 +187,7 @@ namespace Pid
 		prevOutput = output;
 		  
 		// Increment the Run() counter.
-		if(numTimesRan < 2^32-1)
-			numTimesRan++;
+		numTimesRan++;
 	}
 
 	#if(pidENABLE_FP_SUPPORT == 1)

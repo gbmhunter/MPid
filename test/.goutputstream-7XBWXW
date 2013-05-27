@@ -1,0 +1,30 @@
+#include "../src/include/Pid.hpp"
+
+// UnitTest++ library
+#include "UnitTest++/src/UnitTest++.h"
+
+using namespace Pid;
+
+
+TEST(BasicTest)
+{
+	PidDbl pidTest;
+
+	pidTest.Init(
+		1.0,									//!< Kp
+		0.0,									//!< Ki
+		0.0,									//!< Kd
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::VELOCITY_PID,		//!< Control type
+		10.0,									//!< Update rate (ms)
+		0.0,									//!< Min output
+		100.0									//!< Max output
+		0.0									//!< Initial set-point
+	);
+	
+}
+
+int main()
+{
+
+}

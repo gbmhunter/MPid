@@ -51,6 +51,9 @@ namespace Pid
 		using namespace Fp;
 	#endif
 
+	
+
+
 	//===============================================================================================//
 	//================================= PUBLIC MEMBER METHODS =======================================//
 	//===============================================================================================//
@@ -93,10 +96,6 @@ namespace Pid
 		setPoint = setPoint;
 		prevInput = 0;
 		prevOutput = 0;
-
-		pTerm = 0.0;
-		iTerm = 0.0;
-		dTerm = 0.0;
 			
 	}
 
@@ -159,14 +158,8 @@ namespace Pid
 		else if(iTerm < outMin)
 			iTerm = outMin;
 
-		// DERIVATIVE CALS
-
-		// Only calculate derivative if run once or more already.
-		if(numTimesRan > 0)
-		{
-			inputChange = (input - prevInput);
-			dTerm = -zKd*inputChange;
-		}
+		inputChange = (input - prevInput);
+		dTerm = -zKd*inputChange;
 
 		// Compute PID Output. Value depends on outputMode
 		if(outputMode == DONT_ACCUMULATE_OUTPUT)
@@ -189,9 +182,6 @@ namespace Pid
 		// Remember last output for next call
 		prevOutput = output;
 		  
-		// Increment the Run() counter.
-		if(numTimesRan < 2^32-1)
-			numTimesRan++;
 	}
 
 	#if(pidENABLE_FP_SUPPORT == 1)
