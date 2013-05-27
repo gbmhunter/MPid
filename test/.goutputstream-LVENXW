@@ -51,15 +51,15 @@ TEST(ZpZiZdCorrectTest)
 
 TEST(ZeroInZeroOutTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller
 	pidTest.Init(
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::VELOCITY_PID,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::VELOCITY_PID,		//!< Control type
 		10.0,									//!< Update rate (ms)
 		0.0,									//!< Min output
 		100.0,								//!< Max output
@@ -68,21 +68,21 @@ TEST(ZeroInZeroOutTest)
 	
 	pidTest.Run(0.0);
 
-	CHECK_CLOSE(0, pidTest.output, 0.0001);
+	CHECK_EQUAL(0, pidTest.output);
 
 }
 
 TEST(POnlyPositiveTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -99,15 +99,15 @@ TEST(POnlyPositiveTest)
 
 TEST(POnlyNegativeTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -124,15 +124,15 @@ TEST(POnlyNegativeTest)
 
 TEST(IOnlyPositiveTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		10.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -155,15 +155,15 @@ TEST(IOnlyPositiveTest)
 
 TEST(IOnlyNegativeTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		10.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -186,15 +186,15 @@ TEST(IOnlyNegativeTest)
 
 TEST(DOnlyPositiveTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		0.0,									//!< Ki
 		1.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -225,15 +225,15 @@ TEST(DOnlyPositiveTest)
 
 TEST(DOnlyNegativeTest)
 {
-	PidDbl<double> pidTest;
+	PidDbl pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		0.0,									//!< Ki
 		1.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid::PidDbl::PID_DIRECT,		//!< Control type
+		Pid::PidDbl::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output

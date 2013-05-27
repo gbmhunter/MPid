@@ -68,7 +68,7 @@ TEST(ZeroInZeroOutTest)
 	
 	pidTest.Run(0.0);
 
-	CHECK_CLOSE(0, pidTest.output, 0.0001);
+	CHECK_EQUAL(0, pidTest.output);
 
 }
 
