@@ -324,7 +324,7 @@ namespace Pid
 		prevOutput = output;
 		  
 		// Increment the Run() counter.
-		if(numTimesRan < 2^32-1)
+		if(numTimesRan < (2^(32))-1)
 			numTimesRan++;
 	}
 

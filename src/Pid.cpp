@@ -25,14 +25,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 // User
 #include "./include/Pid.hpp"
-//#include "Global.h"
-//#include "Config.h"89
-//#include "./FixedPoint/include/Fp.h"		// For fixed point arithmetic (fast PID)
-//#include "./Comms/include/UartDebug.h"		// Printing debug messages
-//#include "./Pid/include/Pid.h"
 
 //===============================================================================================//
 //================================== PRECOMPILER CHECKS =========================================//
