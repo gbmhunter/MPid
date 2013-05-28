@@ -4,7 +4,7 @@ Embedded PID Control Library
 - Author: gbmhunter <<gbmhunter@gmail.com>> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/05/28
-- Version: v2.2.2.0
+- Version: v2.2.2.1
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -46,7 +46,34 @@ Usage
 -----
 
 	:::c++
-	PidDbl pidTest;
+	Pid<double> pidTest;
+
+	main()
+	{
+		// Set-up PID controller, non accumulating
+		pidTest.Init(
+			1.0,									//!< Kp
+			1.0,									//!< Ki
+			1.0,									//!< Kd
+			Pid<double>::PID_DIRECT,				//!< Control type
+			Pid<double>::DONT_ACCUMULATE_OUTPUT,	//!< Control type
+			10.0,									//!< Update rate (ms)
+			-100.0,									//!< Min output
+			100.0,									//!< Max output
+			0.0										//!< Initial set-point
+		);
+	}
+	
+	// Call every 10.0ms (as set in Pid.Init())
+	TimerIsr()
+	{
+		// Read input
+		input = ReadPin(2);
+		// Perform one execution
+		pidTest.Run(input);
+		// Set output
+		SetPin(3) = pidTest.output;
+	}
 	
 See test/PidTest.cpp for more examples.
 	
@@ -69,3 +96,4 @@ Changelog
 - v2.2.0.0		-> (2013/05/28) Removed specific fixed-point implementation in Pid.cpp, with the idea that you can now use the template code.
 - v2.2.1.0		-> (2013/05/28) Changed zKp, zKi, zKd (time-scaled constants) to Zp, Zi, Zd. Removed incorrect include directory in test/Makefile.
 - v2.2.2.0		-> (2013/05/28) Renamed namespace from Pid to PidNs and Pid class from PidDbl (no longer relevant with templating) to Pid.
+- v2.2.2.1		-> (2013/05/28) Added usage example to README.md.
