@@ -1,26 +1,26 @@
 #
-# 'make depend' uses makedepend to automatically generate dependencies 
+# 'make'        Build executable file.
+# 'make clean'  Removes all .o and executable files.
+# 'make depend' Uses makedepend to automatically generate dependencies 
 #               (dependencies are added to end of Makefile)
-# 'make'        build executable file 'mycc'
-# 'make clean'  removes all .o and executable files
 #
 
-# define the C compiler to use
+# Define the compiler to use (e.g. gcc, g++)
 CC = g++
 
-# define any compile-time flags
+# Define any compile-time flags
 CFLAGS = -Wall -g
 
-# define any directories containing header files other than /usr/include
+# Define any directories containing header files other than /usr/include
 #
-INCLUDES = -I/home/newhall/include  -I../include
+INCLUDES = -I../include
 
-# define library paths in addition to /usr/lib
+# Define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
 LFLAGS = -L./UnitTest++
 
-# define any libraries to link into executable:
+# Define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
 #   option, something like (this will link in libmylib.so and libm.so:
 LIBS = -lUnitTest++

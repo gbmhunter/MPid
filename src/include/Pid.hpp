@@ -112,9 +112,9 @@ namespace Pid
 			//! 			be adjusted on the fly during normal operation
 			void SetTunings(fp<CDP> kp, fp<CDP> ki, fp<CDP> kd);
 		
-			fp<CDP> zKp;					//!< Time-step scaled proportional constant for quick calculation (equal to actualKp)
-			fp<CDP> zKi;					//!< Time-step scaled integral constant for quick calculation
-			fp<CDP> zKd;					//!< Time-step scaled derivative constant for quick calculation
+			fp<CDP> Zp;					//!< Time-step scaled proportional constant for quick calculation (equal to actualKp)
+			fp<CDP> Zi;					//!< Time-step scaled integral constant for quick calculation
+			fp<CDP> Zd;					//!< Time-step scaled derivative constant for quick calculation
 			fp<CDP> actualKp;			//!< Actual (non-scaled) proportional constant
 			fp<CDP> actualKi;			//!< Actual (non-scaled) integral constant
 			fp<CDP> actualKd;			//!< Actual (non-scaled) derivative constant
@@ -200,13 +200,13 @@ namespace Pid
 			//#endif
 
 			//! Time-step scaled proportional constant for quick calculation (equal to actualKp)
-			dataType zKp;		
+			dataType Zp;		
 			
 			//! Time-step scaled integral constant for quick calculation
-			dataType zKi;	
+			dataType Zi;	
 			
 			//! Time-step scaled derivative constant for quick calculation
-			dataType zKd;					
+			dataType Zd;					
 			
 			//! Actual (non-scaled) proportional constant
 			dataType actualKp;			
@@ -286,7 +286,7 @@ namespace Pid
 		
 		// Integral calcs
 		
-		iTerm += (zKi * error);
+		iTerm += (Zi * error);
 		// Perform min/max bound checking on integral term
 		if(iTerm > outMax) 
 			iTerm = outMax;
@@ -299,17 +299,17 @@ namespace Pid
 		if(numTimesRan > 0)
 		{
 			inputChange = (input - prevInput);
-			dTerm = -zKd*inputChange;
+			dTerm = -Zd*inputChange;
 		}
 
 		// Compute PID Output. Value depends on outputMode
 		if(outputMode == DONT_ACCUMULATE_OUTPUT)
 		{
-			output = zKp*error + iTerm + dTerm;
+			output = Zp*error + iTerm + dTerm;
 		}
 		else if(outputMode == ACCUMULATE_OUTPUT)
 		{
-			output = prevOutput + zKp*error + iTerm + dTerm;
+			output = prevOutput + Zp*error + iTerm + dTerm;
 		}
 		
 		// Limit output
@@ -338,17 +338,17 @@ namespace Pid
 		actualKd = kd;
 	   
 	   // Calculate time-step-scaled PID terms
-	   zKp = kp;
+	   Zp = kp;
 
 		// The next bit requires double->dataType casting functionality.
-	   zKi = ki * (dataType)(samplePeriodMs/1000.0);
-	   zKd = kd / (dataType)(samplePeriodMs/1000.0);
+	   Zi = ki * (dataType)(samplePeriodMs/1000.0);
+	   Zd = kd / (dataType)(samplePeriodMs/1000.0);
 	 
 	  if(controllerDir == PID_REVERSE)
 	   {
-	      zKp = (0 - zKp);
-	      zKi = (0 - zKi);
-	      zKd = (0 - zKd);
+	      Zp = (0 - Zp);
+	      Zi = (0 - Zi);
+	      Zd = (0 - Zd);
 	   }
 
 		#if(pidPRINT_DEBUG == 1)
@@ -359,9 +359,9 @@ namespace Pid
 				actualKp,
 				actualKi,
 				actualKd,
-				zKp,
-				zKi,
-				zKd,
+				Zp,
+				Zi,
+				Zd,
 				samplePeriodMs);
 			PrintDebug(debugBuff);
 		#endif
@@ -384,17 +384,17 @@ namespace Pid
 
 	template <class dataType> dataType PidDbl<dataType>::GetZp()
 	{
-		return zKp;
+		return Zp;
 	}
 
 	template <class dataType> dataType PidDbl<dataType>::GetZi()
 	{
-		return zKi;
+		return Zi;
 	}
 
 	template <class dataType> dataType PidDbl<dataType>::GetZd()
 	{
-		return zKd;
+		return Zd;
 	}
 	
 	template <class dataType> void PidDbl<dataType>::SetSamplePeriod(uint32_t newSamplePeriodMs)
@@ -403,8 +403,8 @@ namespace Pid
 	   {
 	      dataType ratio  = (dataType)newSamplePeriodMs
 	                      / (double)samplePeriodMs;
-	      zKi *= ratio;
-	      zKd /= ratio;
+	      Zi *= ratio;
+	      Zd /= ratio;
 	      samplePeriodMs = newSamplePeriodMs;
 	   }
 	}
@@ -423,9 +423,9 @@ namespace Pid
 		if(controllerDir != controllerDir)
 		{
 	   		// Invert control constants
-			zKp = (0 - zKp);
-	    	zKi = (0 - zKi);
-	    	zKd = (0 - zKd);
+			Zp = (0 - Zp);
+	    	Zi = (0 - Zi);
+	    	Zd = (0 - Zd);
 		}   
 	   controllerDir = controllerDir;
 	}
