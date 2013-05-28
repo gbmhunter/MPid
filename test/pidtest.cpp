@@ -12,12 +12,12 @@
 // UnitTest++ library
 #include "UnitTest++/src/UnitTest++.h"
 
-using namespace Pid;
+using namespace PidNs;
 
 
 TEST(ZpZiZdCorrectTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	double kp = 1.0;
 	double ki = 5.0;
@@ -29,8 +29,8 @@ TEST(ZpZiZdCorrectTest)
 		kp,									//!< Kp
 		ki,									//!< Ki
 		kd,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::VELOCITY_PID,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::VELOCITY_PID,		//!< Control type
 		timeStepMs,							//!< Update rate (ms)
 		0.0,									//!< Min output
 		100.0,								//!< Max output
@@ -51,15 +51,15 @@ TEST(ZpZiZdCorrectTest)
 
 TEST(ZeroInZeroOutTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller
 	pidTest.Init(
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::VELOCITY_PID,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::VELOCITY_PID,		//!< Control type
 		10.0,									//!< Update rate (ms)
 		0.0,									//!< Min output
 		100.0,								//!< Max output
@@ -69,20 +69,19 @@ TEST(ZeroInZeroOutTest)
 	pidTest.Run(0.0);
 
 	CHECK_CLOSE(0, pidTest.output, 0.0001);
-
 }
 
 TEST(POnlyPositiveTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -94,20 +93,19 @@ TEST(POnlyPositiveTest)
 
 	// Output should be -1
 	CHECK_CLOSE(-1.0, pidTest.output, 0.0001);
-
 }
 
 TEST(POnlyNegativeTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -119,20 +117,19 @@ TEST(POnlyNegativeTest)
 
 	// Output should be 1
 	CHECK_CLOSE(1.0, pidTest.output, 0.0001);
-
 }
 
 TEST(IOnlyPositiveTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		10.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -150,20 +147,19 @@ TEST(IOnlyPositiveTest)
 
 	// Output should be -20
 	CHECK_CLOSE(-20.0, pidTest.output, 0.0001);
-
 }
 
 TEST(IOnlyNegativeTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		10.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -181,20 +177,19 @@ TEST(IOnlyNegativeTest)
 
 	// Output should be 20
 	CHECK_CLOSE(20.0, pidTest.output, 0.0001);
-
 }
 
 TEST(DOnlyPositiveTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		0.0,									//!< Ki
 		1.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -220,20 +215,19 @@ TEST(DOnlyPositiveTest)
 
 	// Output should be 1.0
 	CHECK_CLOSE(1.0, pidTest.output, 0.0001);
-
 }
 
 TEST(DOnlyNegativeTest)
 {
-	PidDbl<double> pidTest;
+	Pid<double> pidTest;
 
 	// Set-up P only controller, non accumulating
 	pidTest.Init(
 		0.0,									//!< Kp
 		0.0,									//!< Ki
 		1.0,									//!< Kd
-		Pid::PidDbl<double>::PID_DIRECT,		//!< Control type
-		Pid::PidDbl<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::PID_DIRECT,		//!< Control type
+		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -259,7 +253,6 @@ TEST(DOnlyNegativeTest)
 
 	// Output should be -1.0
 	CHECK_CLOSE(-1.0, pidTest.output, 0.0001);
-
 }
 
 int main()

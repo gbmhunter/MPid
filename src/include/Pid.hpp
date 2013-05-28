@@ -45,23 +45,17 @@
 #include <stdint.h>		// uint32_t
 #include <stdio.h>		// snprintf
 
-namespace Pid
+namespace PidNs
 {
-	#if(pidENABLE_FP_SUPPORT == 1)
-		using namespace Fp;
-	#endif
-	//===============================================================================================//
-	//=================================== PUBLIC TYPEDEFS ===========================================//
-	//===============================================================================================//
-
-
-
+	
 	//! @brief		Base PID class. 
 	class PidDataBase
 	{
 	
 		public:
-			
+			//===============================================================================================//
+			//=================================== PUBLIC TYPEDEFS ===========================================//
+			//===============================================================================================//
 			typedef enum			//!< Enumerates the controller direction modes
 			{
 				PID_DIRECT,			//!< Direct drive (+error gives +output)
@@ -81,62 +75,9 @@ namespace Pid
 			ctrlDir_t controllerDir;
 			outputMode_t outputMode;	//!< The output mode (non-accumulating vs. accumulating) for the control loop
 	};
-
-	#if(pidENABLE_FP_SUPPORT == 1)
-	//! @brief		PID class that uses fixed-point numbers for it's arithmetic.
-	//! @details	The fixed-point library can be downloaded from BitBucket also.
-	class PidFp : public PidDataBase
-	{
-		public:
-		
-			//! @brief 		Init function
-			//! @details   	The parameters specified here are those for for which we can't set up 
-			//!    			reliable defaults, so we need to have the user set them.
-			void Init(
-				fp<CDP> kp, fp<CDP> ki, fp<CDP> kd, 
-				ctrlDir_t controllerDir, outputMode_t outputMode, fp<CDP> samplePeriodMs, 
-				fp<CDP> minOutput, fp<CDP> maxOutput, fp<CDP> setPoint);
-		
-			//! @brief 		Computes new PID values
-			//! @details 	Call once per sampleTimeMs. Output is stored in the pidData structure.
-			void Run(fp<CDP> input);
-			
-			void SetOutputLimits(fp<CDP> min, fp<CDP> max);
-			
-			//! @details	The PID will either be connected to a direct acting process (+error leads to +output, aka inputs are positive) 
-			//!				or a reverse acting process (+error leads to -output, aka inputs are negative)
-			void SetControllerDirection(ctrlDir_t controllerDir);
-			
-			//! @brief		This function allows the controller's dynamic performance to be adjusted. 
-			//! @details	It's called automatically from the init function, but tunings can also
-			//! 			be adjusted on the fly during normal operation
-			void SetTunings(fp<CDP> kp, fp<CDP> ki, fp<CDP> kd);
-		
-			fp<CDP> Zp;					//!< Time-step scaled proportional constant for quick calculation (equal to actualKp)
-			fp<CDP> Zi;					//!< Time-step scaled integral constant for quick calculation
-			fp<CDP> Zd;					//!< Time-step scaled derivative constant for quick calculation
-			fp<CDP> actualKp;			//!< Actual (non-scaled) proportional constant
-			fp<CDP> actualKi;			//!< Actual (non-scaled) integral constant
-			fp<CDP> actualKd;			//!< Actual (non-scaled) derivative constant
-			fp<CDP> prevInput;			//!< Actual (non-scaled) proportional constant
-			fp<CDP> inputChange;			//!< The change in input between the current and previous value
-			fp<CDP> setPoint;			//!< The set-point the PID control is trying to make the output converge to.
-			fp<CDP> error;				//!< The error between the set-point and actual output (set point - output, positive
-										//!< when actual output is lagging set-point
-			fp<CDP> output;				//!< The control output. This is updated when Pid_Run() is called
-			fp<CDP> prevOutput;			//!< The output value calculated the previous time Pid_Run was called
-			fp<CDP> samplePeriodMs;		//!< The sample period (in milliseconds) between successive Pid_Run() calls.
-										//!< The constants with the z prefix are scaled according to this value.
-			fp<CDP> pTerm;				//!< The proportional term that is summed as part of the output (calculated in Pid_Run())
-			fp<CDP> iTerm;				//!< The integral term that is summed as part of the output (calculated in Pid_Run())
-			fp<CDP> dTerm;				//!< The derivative term that is summed as part of the output (calculated in Pid_Run())
-			fp<CDP> outMin;				//!< The minimum output value. Anything lower will be limited to this floor.
-			fp<CDP> outMax;				//!< The maximum output value. Anything higher will be limited to this ceiling.
-	};	
-	#endif	// #if(pidENABLE_FP_SUPPORT == 1)
 	
 	//! @brief		PID class that uses dataTypes for it's arithmetic
-	template <class dataType> class PidDbl : public PidDataBase
+	template <class dataType> class Pid : public PidDataBase
 	{
 		public:
 		
@@ -246,7 +187,7 @@ namespace Pid
 			uint32_t numTimesRan;
 	};
 
-	template <class dataType> void PidDbl<dataType>::Init(
+	template <class dataType> void Pid<dataType>::Init(
 		dataType kp, 
 		dataType ki,
 		dataType kd, 
@@ -277,7 +218,7 @@ namespace Pid
 			
 	}
 
-	template <class dataType> void PidDbl<dataType>::Run(dataType input)
+	template <class dataType> void Pid<dataType>::Run(dataType input)
 	{
 		// Compute all the working error variables
 		//dataType input = *_input;
@@ -328,7 +269,7 @@ namespace Pid
 			numTimesRan++;
 	}
 
-	template <class dataType> void PidDbl<dataType>::SetTunings(dataType kp, dataType ki, dataType kd)
+	template <class dataType> void Pid<dataType>::SetTunings(dataType kp, dataType ki, dataType kd)
 	{
 	   	if (kp<0 || ki<0 || kd<0) 
 	   		return;
@@ -367,37 +308,37 @@ namespace Pid
 		#endif
 	}
 
-	template <class dataType> dataType PidDbl<dataType>::GetKp()
+	template <class dataType> dataType Pid<dataType>::GetKp()
 	{
 		return actualKp;
 	}
 
-	template <class dataType> dataType PidDbl<dataType>::GetKi()
+	template <class dataType> dataType Pid<dataType>::GetKi()
 	{
 		return actualKi;
 	}
 
-	template <class dataType> dataType PidDbl<dataType>::GetKd()
+	template <class dataType> dataType Pid<dataType>::GetKd()
 	{
 		return actualKd;
 	}
 
-	template <class dataType> dataType PidDbl<dataType>::GetZp()
+	template <class dataType> dataType Pid<dataType>::GetZp()
 	{
 		return Zp;
 	}
 
-	template <class dataType> dataType PidDbl<dataType>::GetZi()
+	template <class dataType> dataType Pid<dataType>::GetZi()
 	{
 		return Zi;
 	}
 
-	template <class dataType> dataType PidDbl<dataType>::GetZd()
+	template <class dataType> dataType Pid<dataType>::GetZd()
 	{
 		return Zd;
 	}
 	
-	template <class dataType> void PidDbl<dataType>::SetSamplePeriod(uint32_t newSamplePeriodMs)
+	template <class dataType> void Pid<dataType>::SetSamplePeriod(uint32_t newSamplePeriodMs)
 	{
 	   if (newSamplePeriodMs > 0)
 	   {
@@ -409,7 +350,7 @@ namespace Pid
 	   }
 	}
 
-	template <class dataType> void PidDbl<dataType>::SetOutputLimits(dataType min, dataType max)
+	template <class dataType> void Pid<dataType>::SetOutputLimits(dataType min, dataType max)
 	{
 		if(min >= max) 
 	   		return;
@@ -418,7 +359,7 @@ namespace Pid
 	 
 	}
 
-	template <class dataType> void PidDbl<dataType>::SetControllerDirection(ctrlDir_t controllerDir)
+	template <class dataType> void Pid<dataType>::SetControllerDirection(ctrlDir_t controllerDir)
 	{
 		if(controllerDir != controllerDir)
 		{
@@ -430,7 +371,7 @@ namespace Pid
 	   controllerDir = controllerDir;
 	}
 
-	template <class dataType> void PidDbl<dataType>::PrintDebug(const char* msg)
+	template <class dataType> void Pid<dataType>::PrintDebug(const char* msg)
 	{
 		// Support for multiple platforms
 		#if(__linux)

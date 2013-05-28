@@ -4,7 +4,7 @@ Embedded PID Control Library
 - Author: gbmhunter <<gbmhunter@gmail.com>> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/05/28
-- Version: v2.2.1.0
+- Version: v2.2.2.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -68,3 +68,4 @@ Changelog
 - v2.1.0.0		-> (2013/05/28) Converted more README sections to markdown format. Added Makefile for unit tests.
 - v2.2.0.0		-> (2013/05/28) Removed specific fixed-point implementation in Pid.cpp, with the idea that you can now use the template code.
 - v2.2.1.0		-> (2013/05/28) Changed zKp, zKi, zKd (time-scaled constants) to Zp, Zi, Zd. Removed incorrect include directory in test/Makefile.
+- v2.2.2.0		-> (2013/05/28) Renamed namespace from Pid to PidNs and Pid class from PidDbl (no longer relevant with templating) to Pid.
