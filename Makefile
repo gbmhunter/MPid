@@ -1,10 +1,3 @@
-#
-# 'make'        Build executable file.
-# 'make clean'  Removes all .o and executable files.
-# 'make depend' Uses makedepend to automatically generate dependencies 
-#               (dependencies are added to end of Makefile)
-#
-
 # Define the compiler to use (e.g. gcc, g++)
 CC = g++
 
@@ -13,20 +6,20 @@ CFLAGS = -Wall -g
 
 # Define any directories containing header files other than /usr/include
 #
-INCLUDES = -I../include
+INCLUDES = -I./src/include
 
 # Define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS = -L./UnitTest++
+LFLAGS = -L./test/UnitTest++
 
 # Define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
 #   option, something like (this will link in libmylib.so and libm.so:
 LIBS = -lUnitTest++
 
-# define the C source files
-SRCS = ./PidTest.cpp
+# Define the source files
+SRCS = test/PidTest.cpp
 
 # define the C object files 
 #
@@ -39,30 +32,29 @@ SRCS = ./PidTest.cpp
 OBJS = $(SRCS:.c=.o)
 
 # define the executable file 
-MAIN = PidTest.o
-
-#
-# The following part of the makefile is generic; it can be used to 
-# build any executable just by changing the definitions above and by
-# deleting dependencies appended to the file from 'make depend'
-#
+MAIN = test/PidTest.o
 
 .PHONY: depend clean
 
-all:    $(MAIN)
-	@echo " Compile successful."
-
-$(MAIN): $(OBJS) 
-	@echo " CC $<"; $(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
-
-# this is a suffix replacement rule for building .o's from .c's
-# it uses automatic variables $<: the name of the prerequisite of
-# the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
-# (see the gnu make manual section about automatic variables)
-.c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
-
+# Run UnitTest++ makefile
+all: UnitTestLib ./test/PidTest.o
+	
+	# Run Fp32 unit tests:
+	@./test/PidTest.o
+	
+./test/PidTest.o : ./test/PidTest.cpp ./src/include/Pid.hpp UnitTestLib
+	# Compile unit tests
+	g++ ./test/PidTest.cpp -L./test/UnitTest++ -lUnitTest++ -o ./test/PidTest.o
+	
+UnitTestLib :
+	# Compile UnitTest++ library (has it's own Makefile)
+	$(MAKE) -C ./test/UnitTest++/ all
+	
 clean:
+	# Clean UnitTest++ library (has it's own Makefile)
+	$(MAKE) -C ./test/UnitTest++/ clean
+	
+	# Clean everything else
 	@echo " Cleaning..."; $(RM) *.o *~ $(MAIN)
 
 depend: $(SRCS)

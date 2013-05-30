@@ -1,10 +1,11 @@
+============================
 Embedded PID Control Library
-----------------------------
+============================
 
-- Author: gbmhunter <<gbmhunter@gmail.com>> (http://www.cladlab.com)
+- Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
-- Last Modified: 2013/05/28
-- Version: v2.2.2.1
+- Last Modified: 2013/05/31
+- Version: v2.3.0.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -17,6 +18,8 @@ Embedded PID Control Library
 
 Description
 -----------
+
+**Cpp-Pid supersedes C-Pid, the PID library written in C.**
 
 A light-weight, fast PID library designed for use on embedded systems (but can also run on any machine which has a G++ compiler).
 
@@ -45,7 +48,8 @@ External Dependencies
 Usage
 -----
 
-	:::c++
+::
+	
 	Pid<double> pidTest;
 
 	main()
@@ -97,3 +101,4 @@ Changelog
 - v2.2.1.0		-> (2013/05/28) Changed zKp, zKi, zKd (time-scaled constants) to Zp, Zi, Zd. Removed incorrect include directory in test/Makefile.
 - v2.2.2.0		-> (2013/05/28) Renamed namespace from Pid to PidNs and Pid class from PidDbl (no longer relevant with templating) to Pid.
 - v2.2.2.1		-> (2013/05/28) Added usage example to README.md.
+- v2.3.0.0		-> (2013/05/31) Renamed README.md back to README.rst. Added Makefile in root dir that compiles everything and runs unit tests. Added note about Cpp-Pid superseding C-Pid. Removed object and .d files.
