@@ -2,10 +2,13 @@
 Embedded PID Control Library
 ============================
 
+.. image:: https://travis-ci.org/gbmhunter/Cpp-Pid.png?branch=master   
+	:target: https://travis-ci.org/gbmhunter/Cpp-Pid
+
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/08/27
-- Version: v2.4.0.0
+- Version: v2.4.0.1
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -103,3 +106,4 @@ Changelog
 - v2.2.2.1		-> (2013/05/28) Added usage example to README.md.
 - v2.3.0.0		-> (2013/05/31) Renamed README.md back to README.rst. Added Makefile in root dir that compiles everything and runs unit tests. Added note about Cpp-Pid superseding C-Pid. Removed object and .d files.
 - v2.4.0.0		-> (2013/08/27) Added .travis.yml file in root directory for Travis CI compatibility. Added Travis CI build status image to top of README.
+- v2.4.0.1		-> (2013/08/27) Added Travis CI build status image that I had forgotten to do in the last commit.
