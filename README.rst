@@ -8,7 +8,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/08/27
-- Version: v2.4.0.1
+- Version: v2.4.0.2
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -92,18 +92,23 @@ For known bugs, desired enhancements e.t.c, see BitBucket issues section.
 Changelog
 ---------
 
-- v1.0.0.0 		-> (2012/10/01) Initial commit.
-- v1.0.0.1		-> (2013/05/27) Added README.rst.
-- v1.1.0.0		-> (2013/05/27) Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->"). Prevented derivative control for influencing the output until at least two calls to Run() have been made (i.e. doesn't assume previous input was 0.0 on first call to Run()).
-- v2.0.0.0		-> (2013/05/27) Added support for PID control of any data type by making PID class and functions templates. 
-- v2.0.0.1		-> (2013/05/27) Fixed commit issues, removed .goutstream files.
-- v2.0.0.2		-> (2013/05/27) Changed README.rst to README.md (to markdown format).
-- v2.0.0.3		-> (2013/05/27) Fixed version numbers.
-- v2.1.0.0		-> (2013/05/28) Converted more README sections to markdown format. Added Makefile for unit tests.
-- v2.2.0.0		-> (2013/05/28) Removed specific fixed-point implementation in Pid.cpp, with the idea that you can now use the template code.
-- v2.2.1.0		-> (2013/05/28) Changed zKp, zKi, zKd (time-scaled constants) to Zp, Zi, Zd. Removed incorrect include directory in test/Makefile.
-- v2.2.2.0		-> (2013/05/28) Renamed namespace from Pid to PidNs and Pid class from PidDbl (no longer relevant with templating) to Pid.
-- v2.2.2.1		-> (2013/05/28) Added usage example to README.md.
-- v2.3.0.0		-> (2013/05/31) Renamed README.md back to README.rst. Added Makefile in root dir that compiles everything and runs unit tests. Added note about Cpp-Pid superseding C-Pid. Removed object and .d files.
-- v2.4.0.0		-> (2013/08/27) Added .travis.yml file in root directory for Travis CI compatibility. Added Travis CI build status image to top of README.
-- v2.4.0.1		-> (2013/08/27) Added Travis CI build status image that I had forgotten to do in the last commit.
+======== ========== ===================================================================================================
+Version  Date       Comment
+======== ========== ===================================================================================================
+v2.4.0.2 2013/08/27 Change README Changelog to table format.
+v2.4.0.1 2013/08/27 Added Travis CI build status image that I had forgotten to do in the last commit.
+v2.4.0.0 2013/08/27 Added .travis.yml file in root directory for Travis CI compatibility. Added Travis CI build status image to top of README.
+v2.3.0.0 2013/05/31 Renamed README.md back to README.rst. Added Makefile in root dir that compiles everything and runs unit tests. Added note about Cpp-Pid superseding C-Pid. Removed object and .d files.
+v2.2.2.1 2013/05/28 Added usage example to README.md.
+v2.2.2.0 2013/05/28 Renamed namespace from Pid to PidNs and Pid class from PidDbl (no longer relevant with templating) to Pid.
+v2.2.1.0 2013/05/28 Changed zKp, zKi, zKd (time-scaled constants) to Zp, Zi, Zd. Removed incorrect include directory in test/Makefile.
+v2.2.0.0 2013/05/28 Removed specific fixed-point implementation in Pid.cpp, with the idea that you can now use the template code.
+v2.1.0.0 2013/05/28 Converted more README sections to markdown format. Added Makefile for unit tests.
+v2.0.0.3 2013/05/27 Fixed version numbers.
+v2.0.0.2 2013/05/27 Changed README.rst to README.md (to markdown format).
+v2.0.0.1 2013/05/27 Fixed commit issues, removed .goutstream files.
+v2.0.0.0 2013/05/27 Added support for PID control of any data type by making PID class and functions templates. 
+v1.1.0.0 2013/05/27 Added units tests and UnitTest++ library to test/. Made debug printing portable (by creating PrintDebug() function). Fixed bug with settingSampleMs for PidDbl object (added "this->"). Prevented derivative control for influencing the output until at least two calls to Run() have been made (i.e. doesn't assume previous input was 0.0 on first call to Run()).
+v1.0.0.1 2013/05/27 Added README.rst.
+v1.0.0.0 2012/10/01 Initial commit.
+======== ========== ===================================================================================================
