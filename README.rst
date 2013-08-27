@@ -8,7 +8,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/08/27
-- Version: v2.4.0.2
+- Version: v2.4.0.3
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -87,7 +87,7 @@ See test/PidTest.cpp for more examples.
 Issues
 ------
 
-For known bugs, desired enhancements e.t.c, see BitBucket issues section.
+For known bugs, desired enhancements e.t.c, see GitHub issues section.
 	
 Changelog
 ---------
@@ -95,7 +95,8 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
-v2.4.0.2 2013/08/27 Change README Changelog to table format.
+v2.4.0.3 2013/08/27 Changed reference to BitBucket in README to GitHub.
+v2.4.0.2 2013/08/27 Changed README Changelog to table format.
 v2.4.0.1 2013/08/27 Added Travis CI build status image that I had forgotten to do in the last commit.
 v2.4.0.0 2013/08/27 Added .travis.yml file in root directory for Travis CI compatibility. Added Travis CI build status image to top of README.
 v2.3.0.0 2013/05/31 Renamed README.md back to README.rst. Added Makefile in root dir that compiles everything and runs unit tests. Added note about Cpp-Pid superseding C-Pid. Removed object and .d files.
