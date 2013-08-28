@@ -18,35 +18,41 @@ LFLAGS = -L./test/UnitTest++
 #   option, something like (this will link in libmylib.so and libm.so:
 LIBS = -lUnitTest++
 
-# Define the source files
-SRCS = test/PidTest.cpp
+SRC_OBJ_FILES := $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
+SRC_LD_FLAGS := 
+SRC_CC_FLAGS := -Wall -g
 
-# define the C object files 
-#
-# This uses Suffix Replacement within a macro:
-#   $(name:string1=string2)
-#         For each word in 'name' replace 'string1' with 'string2'
-# Below we are replacing the suffix .c of all words in the macro SRCS
-# with the .o suffix
-#
-OBJS = $(SRCS:.c=.o)
-
-# define the executable file 
-MAIN = test/PidTest.o
+TEST_OBJ_FILES := $(patsubst %.cpp,%.o,$(wildcard test/*.cpp))
+TEST_LD_FLAGS := 
+TEST_CC_FLAGS := -Wall -g
 
 .PHONY: depend clean
 
 # Run UnitTest++ makefile
-all: UnitTestLib ./test/PidTest.o
+all: PidLib Test
 	
-	# Run Fp32 unit tests:
-	@./test/PidTest.o
+	# Run Pid unit tests:
+	@./test/PidTest.elf
 	
-./test/PidTest.o : ./test/PidTest.cpp ./src/include/Pid.hpp UnitTestLib
-	# Compile unit tests
-	g++ ./test/PidTest.cpp -L./test/UnitTest++ -lUnitTest++ -o ./test/PidTest.o
+PidLib : $(SRC_OBJ_FILES)
+	# Make Pid library
+	ar r libPid.a $(SRC_OBJ_FILES)
 	
-UnitTestLib :
+# Generic rule for src object files
+src/%.o: src/%.cpp
+	# Compiling src2
+	g++ $(SRC_CC_FLAGS) -c -o $@ $<
+
+	# Compiles unit test code
+Test : $(TEST_OBJ_FILES) | PidLib UnitTestLib
+	# Compiling unit test code
+	g++ $(TEST_LD_FLAGS) -o ./test/PidTest.elf $(TEST_OBJ_FILES) -L./test/UnitTest++ -lUnitTest++ -L./ -lPid
+	
+# Generic rule for test object files
+test/%.o: test/%.cpp
+	g++ $(TEST_CC_FLAGS) -c -o $@ $<
+	
+UnitTestLib:
 	# Compile UnitTest++ library (has it's own Makefile)
 	$(MAKE) -C ./test/UnitTest++/ all
 	
@@ -55,9 +61,19 @@ clean:
 	$(MAKE) -C ./test/UnitTest++/ clean
 	
 	# Clean everything else
-	@echo " Cleaning..."; $(RM) *.o *~ $(MAIN)
-
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
-
-# DO NOT DELETE THIS LINE -- make depend needs it
+	@echo " Cleaning src object files..."; $(RM) ./src/*.o
+	@echo " Cleaning Pid static library..."; $(RM) ./*.a
+	@echo " Cleaning test object files..."; $(RM) ./test/*.o
+	@echo " Cleaning test executable..."; $(RM) ./test/*.elf
+	
+clean-ut:
+	# Cleans unit test files
+	@echo " Cleaning test object files..."; $(RM) ./test/*.o
+	@echo " Cleaning test executable..."; $(RM) ./test/*.elf
+	
+clean-pid:
+	# Cleans all PID code
+	@echo " Cleaning src object files..."; $(RM) ./src/*.o
+	@echo " Cleaning Pid static library..."; $(RM) ./*.a
+	@echo " Cleaning test object files..."; $(RM) ./test/*.o
+	@echo " Cleaning test executable..."; $(RM) ./test/*.elf
