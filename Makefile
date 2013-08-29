@@ -1,3 +1,12 @@
+#
+# @file 		Makefile
+# @author 		Geoffrey Hunter <gbmhunter@gmail.com> (wwww.cladlab.com)
+# @edited 		n/a
+# @date 		2013/08/29
+# @brief 		Makefile for Linux-based make, to compile Pid library and run unit test code.
+# @details
+#				See README.rst
+
 # Define the compiler to use (e.g. gcc, g++)
 CC = g++
 
@@ -18,17 +27,33 @@ LFLAGS = -L./test/UnitTest++
 #   option, something like (this will link in libmylib.so and libm.so:
 LIBS = -lUnitTest++
 
-SRC_OBJ_FILES := $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
-SRC_LD_FLAGS := 
+# ---------------------
+# SOURCE CODE VARIABLES
+# ---------------------
+
+# Create a list of C++ files
+SRC_CPP_FILES = $(wildcard src/*.cpp)
+# Create a list of object files
+SRC_OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_CPP_FILES))
+# Create a list of dependency files
+SRC_DEP_FILES = $(SRC_CPP_FILES:.cpp=.d)
+# Linker flags
+SRC_LD_FLAGS :=
+# Compiler flags 
 SRC_CC_FLAGS := -Wall -g
+
+#--------------------
+# TEST CODE VARIABLES
+#--------------------
 
 TEST_OBJ_FILES := $(patsubst %.cpp,%.o,$(wildcard test/*.cpp))
 TEST_LD_FLAGS := 
 TEST_CC_FLAGS := -Wall -g
 
+# Phony target
 .PHONY: depend clean
 
-# Run UnitTest++ makefile
+# Compile all
 all: PidLib Test
 	
 	# Run Pid unit tests:
@@ -38,27 +63,17 @@ PidLib : $(SRC_OBJ_FILES)
 	# Make Pid library
 	ar r libPid.a $(SRC_OBJ_FILES)
 	
-# Create a list of source code files
-SRCS = $(wildcard src/*.cpp)
-
-# Create a list of dependency files
-DEPS = $(SRCS:.cpp=.d)
-	
 # Generic rule for src object files
 src/%.o: src/%.cpp
-	# Compiling source
+	# Compiling source and making dependency files
 	g++ $(SRC_CC_FLAGS) -c -MD -o $@ $<
-	# Making dependency files (.d)
-#	g++ -MM -MT 'src/$*.o' src/$*.cpp > src/$*.d
-	
--include $(DEPS)
-	
-# Pull in dependency info for *existing* .o files
+
+# Include Makefile code in source dependency files
 # -include is like include but shows no errors/warnings
-#include $(OBJS:.o=.d)
-	# Including .d files
+# THIS LINE MUST BE BELOW THE GENERIC RULE FOR SRC OBJECT FILES
+-include $(SRC_DEP_FILES)
 	
-	# Compiles unit test code
+# Compiles unit test code
 Test : $(TEST_OBJ_FILES) | PidLib UnitTestLib
 	# Compiling unit test code
 	g++ $(TEST_LD_FLAGS) -o ./test/PidTest.elf $(TEST_OBJ_FILES) -L./test/UnitTest++ -lUnitTest++ -L./ -lPid
@@ -66,11 +81,12 @@ Test : $(TEST_OBJ_FILES) | PidLib UnitTestLib
 # Generic rule for test object files
 test/%.o: test/%.cpp
 	g++ $(TEST_CC_FLAGS) -c -o $@ $<
-	
+
+# Rule for compiling UnitTest++ library.
 UnitTestLib:
 	# Compile UnitTest++ library (has it's own Makefile)
 	$(MAKE) -C ./test/UnitTest++/ all
-	
+
 clean:
 	# Clean UnitTest++ library (has it's own Makefile)
 	$(MAKE) -C ./test/UnitTest++/ clean
