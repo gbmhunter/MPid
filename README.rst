@@ -7,8 +7,8 @@ Embedded PID Control Library
 
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
-- Last Modified: 2013/08/28
-- Version: v2.4.1.0
+- Last Modified: 2013/08/29
+- Version: v2.5.0.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -95,6 +95,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v2.5.0.0 2013/08/29 Added dependency awareness to Makefile, it now re-builds on header file changes.
 v2.4.1.0 2013/08/28 Updated and fixed the build issue with the Makefile.
 v2.4.0.3 2013/08/27 Changed reference to BitBucket in README to GitHub.
 v2.4.0.2 2013/08/27 Changed README Changelog to table format.

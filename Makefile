@@ -38,11 +38,26 @@ PidLib : $(SRC_OBJ_FILES)
 	# Make Pid library
 	ar r libPid.a $(SRC_OBJ_FILES)
 	
+# Create a list of source code files
+SRCS = $(wildcard src/*.cpp)
+
+# Create a list of dependency files
+DEPS = $(SRCS:.cpp=.d)
+	
 # Generic rule for src object files
 src/%.o: src/%.cpp
-	# Compiling src2
-	g++ $(SRC_CC_FLAGS) -c -o $@ $<
-
+	# Compiling source
+	g++ $(SRC_CC_FLAGS) -c -MD -o $@ $<
+	# Making dependency files (.d)
+#	g++ -MM -MT 'src/$*.o' src/$*.cpp > src/$*.d
+	
+-include $(DEPS)
+	
+# Pull in dependency info for *existing* .o files
+# -include is like include but shows no errors/warnings
+#include $(OBJS:.o=.d)
+	# Including .d files
+	
 	# Compiles unit test code
 Test : $(TEST_OBJ_FILES) | PidLib UnitTestLib
 	# Compiling unit test code
@@ -62,6 +77,7 @@ clean:
 	
 	# Clean everything else
 	@echo " Cleaning src object files..."; $(RM) ./src/*.o
+	@echo " Cleaning src dependency files..."; $(RM) ./src/*.d
 	@echo " Cleaning Pid static library..."; $(RM) ./*.a
 	@echo " Cleaning test object files..."; $(RM) ./test/*.o
 	@echo " Cleaning test executable..."; $(RM) ./test/*.elf
@@ -74,6 +90,7 @@ clean-ut:
 clean-pid:
 	# Cleans all PID code
 	@echo " Cleaning src object files..."; $(RM) ./src/*.o
+	@echo " Cleaning src dependency files..."; $(RM) ./src/*.d
 	@echo " Cleaning Pid static library..."; $(RM) ./*.a
 	@echo " Cleaning test object files..."; $(RM) ./test/*.o
 	@echo " Cleaning test executable..."; $(RM) ./test/*.elf
