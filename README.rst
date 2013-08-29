@@ -2,13 +2,13 @@
 Embedded PID Control Library
 ============================
 
-.. image:: https://travis-ci.org/gbmhunter/Cpp-Pid.png?branch=master   
-	:target: https://travis-ci.org/gbmhunter/Cpp-Pid
-
+.. image:: https://travis-ci.org/gbmhunter/CP3id.png?branch=master   
+	:target: https://travis-ci.org/gbmhunter/CP3id
+	
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2013/08/29
-- Version: v2.5.0.0
+- Version: v2.5.0.1
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -95,6 +95,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v2.5.0.1 2013/08/29 Fixed broken Travis CI build status image in README.
 v2.5.0.0 2013/08/29 Added dependency awareness to Makefile, it now re-builds on header file changes.
 v2.4.1.0 2013/08/28 Updated and fixed the build issue with the Makefile.
 v2.4.0.3 2013/08/27 Changed reference to BitBucket in README to GitHub.
