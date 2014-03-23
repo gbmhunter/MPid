@@ -1,13 +1,12 @@
 //!
-//! @file 		Pid.h
-//! @author 	Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
-//! @edited 	n/a
-//! @date 		2012/10/01
-//! @brief 		Header file for Pid.c
+//! @file 			Pid.h
+//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
+//! @edited 		n/a
+//! @created		2012/10/01
+//! @last-modified 	2014/03/24
+//! @brief 			Header file for Pid.c
 //! @details
-//!				See README.rst
-
-
+//!					See README.rst in repo root dir for more info.
 
 //===============================================================================================//
 //====================================== HEADER GUARD ===========================================//

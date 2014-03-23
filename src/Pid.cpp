@@ -1,11 +1,12 @@
 //!
-//! @file 		Pid.cpp
-//! @author 	Geoffrey Hunter <gbmhunter@gmail.com> (wwww.cladlab.com)
-//! @edited 	n/a
-//! @date 		2012/11/09
-//! @brief 		PID library for embedded systems, written in C++.
+//! @file 			Pid.cpp
+//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (wwww.cladlab.com)
+//! @edited 		n/a
+//! @created		2012/11/09
+//! @last-modified 	2014/03/24
+//! @brief 			PID library for embedded systems, written in C++.
 //! @details
-//!				See README.rst
+//!					See README.rst in repo root dir for more info.
 
 
 //===============================================================================================//
@@ -26,7 +27,7 @@
 #include <stdlib.h>
 
 // User
-#include "./include/Pid.hpp"
+#include "../include/Pid.hpp"
 
 //===============================================================================================//
 //================================== PRECOMPILER CHECKS =========================================//

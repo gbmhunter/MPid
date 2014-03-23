@@ -1,13 +1,14 @@
 //!
-//! @file 		PidTest.cpp
-//! @author 	Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
-//! @edited 	n/a
-//! @date 		2013/05/27
-//! @brief 		Unit test file for Pid library.
+//! @file 			PidTest.cpp
+//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
+//! @edited 		n/a
+//! @created		2013/05/27
+//! @last-modified 	2014/03/24
+//! @brief 			Unit test file for Pid library.
 //! @details
-//!				See README.rst
+//!					See README.rst in repo root dir for more info.
 
-#include "../src/include/Pid.hpp"
+#include "../api/CP3id.hpp"
 
 // UnitTest++ library
 #include "UnitTest++/src/UnitTest++.h"

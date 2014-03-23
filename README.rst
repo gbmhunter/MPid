@@ -7,8 +7,8 @@ Embedded PID Control Library
 	
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
-- Last Modified: 2013/08/29
-- Version: v2.5.1.0
+- Last Modified: 2014/03/24
+- Version: v3.0.0.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -95,6 +95,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.0.0.0 2014/03/24 Moved src/include/ to include/. Added Eclipse C++ project files. Added api/CP3id.hpp, which is a single file you can include to use the CP3id library.
 v2.5.1.0 2013/08/29 Cleaned up Makefile.
 v2.5.0.1 2013/08/29 Fixed broken Travis CI build status image in README.
 v2.5.0.0 2013/08/29 Added dependency awareness to Makefile, it now re-builds on header file changes.
