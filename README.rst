@@ -12,7 +12,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2014/03/24
-- Version: v3.0.2.0
+- Version: v3.1.0.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -38,9 +38,17 @@ Automatically adjusts Kp, Ki and Kd depending on the chosen time step (Zp, Zi, a
 
 **DO NOT** try and make Kp, Ki, or Kd negative. This results in undefined behaviour.
 
+Smooth Control
+--------------
+
 Derivative control is only active when at least two calls to `Run()` have been made (does not assume previous input was 0 on first call, which can cause a huge derivative jolt!).
 
-Can print debug information by setting `pidPRINT_DEBUG` in Pid.hpp to 1. Supports multiple debug outputs for portability (e.g. a hardware UART peripheral in a embedded environment, or the standard `printf()` for linux systems). Debug buffer size can be changed with `pidDEBUG_BUFF_SIZE`, again in Pid.hpp.
+Easy Debugging
+--------------
+
+You can print PID debug information by providing a callback via `Pid::SetDebugPrintCallback()`, which supports method callbacks by utilizing the slotmachine-cpp library. 
+
+You can disable all debug info (to free up some memory space) by setting `cp3id_config_INCLUDE_DEBUG_CODE` in `include/Config.hpp` to `0`. The debug buffer size can be changed with `cp3id_config_DEBUG_BUFF_SIZE`, again in `Config.hpp`.
 
 Internal Dependencies
 ---------------------
@@ -99,6 +107,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.1.0.0 2014/03/24 Added include/Config.hpp to hold all PID configuration settings. Renamed debug print macros to fit. Added slotmachine-cpp lib to lib/slotmachine-cpp, added callback functionality for printing debug information, closes #25. Fixed incorrect checking of the size of the debug buffer, closes #24. Added relevant info to README.
 v3.0.2.0 2014/03/24 Renamed actualKp and associated variables to just Kp, as Zp is now used to describe the time-adjusted ones, closes #2. Added comment to example code in README. Pid::Run() now calculates pTerm correctly, closes #3. Fixed improper use of carat symbol in Pid::Run() bug, closes #23.
 v3.0.1.0 2014/03/24 Added this keyword to Init() function (and others) to prevent self-assignment bug, closes #19. Removed all references of the fixed-point library, now that the library accepts a dynamic data type, closes #20. Changed namespace from PidNs to CP3id, closes #22. Add more comments to PID functions. Updated README project title.
 v3.0.0.0 2014/03/24 Moved src/include/ to include/. Added Eclipse C++ project files. Added api/CP3id.hpp, which is a single file you can include to use the CP3id library.

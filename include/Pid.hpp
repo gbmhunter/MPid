@@ -1,5 +1,5 @@
 //!
-//! @file 			Pid.h
+//! @file 			Pid.hpp
 //! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
 //! @edited 		n/a
 //! @created		2012/10/01
@@ -16,30 +16,24 @@
 	#error Please build with C++ compiler
 #endif
 
-#ifndef PID_H
-#define PID_H
+#ifndef CP3ID_PID_H
+#define CP3ID_PID_H
 
-//===============================================================================================//
-//================================== PRECOMPILER CHECKS =========================================//
-//===============================================================================================//
-
-//! @brief		Set to 1 if you want debug information printed
-#define pidPRINT_DEBUG			0
-
-//! @brief		Size (in bytes) of the debug buffer (only valid if
-//!				pidPRINT_DEBUG is set to 1).
-#define pidDEBUG_BUFF_SIZE		200
-
-//===============================================================================================//
-//======================================== NAMESPACE ============================================//
-//===============================================================================================//
-
+// System includes
 #include <stdint.h>		// uint32_t
 #include <stdio.h>		// snprintf
+
+// User includes
+#include "Config.hpp"									//!< PID configuration file
+#include "../lib/slotmachine-cpp/api/Slotmachine.hpp"	//!< Callback functionality
 
 namespace CP3id
 {
 	
+	//===============================================================================================//
+	//===================================== CLASS DEFINITION ========================================//
+	//===============================================================================================//
+
 	//! @brief		PID class that uses dataTypes for it's arithmetic
 	template <class dataType> class Pid
 	{
@@ -114,8 +108,11 @@ namespace CP3id
 			//! @brief		Returns the time-scaled (dependent on sample period) derivative constant.
 			dataType GetZd();
 
-			//! @brief		Prints debug information to the desired output
-			void PrintDebug(const char* msg);
+			#if(cp3id_config_INCLUDE_DEBUG_CODE == 1)
+				//! @brief		Pass in a callback for printing debug information.
+				//! @details	Uses the slotmachine-cpp library to provide callback to method functionality.
+				void SetDebugPrintCallback(SlotMachine::Callback<void, const char*> debugPrintCallback);
+			#endif
 
 			//! @brief 		The set-point the PID control is trying to make the output converge to.
 			dataType setPoint;			
@@ -125,32 +122,34 @@ namespace CP3id
 			dataType output;				
 		
 		private:
-			//#if(pidPRINT_DEBUG == 1)
-				char debugBuff[pidDEBUG_BUFF_SIZE];
-			//#endif
 
-			//! Time-step scaled proportional constant for quick calculation (equal to actualKp)
+			#if(cp3id_config_INCLUDE_DEBUG_CODE == 1)
+				//! @brief		Buffer for debug snprintf() calls.
+				char debugBuff[cp3id_config_DEBUG_BUFF_SIZE];
+			#endif
+
+			//! @brief		Time-step scaled proportional constant for quick calculation (equal to actualKp)
 			dataType Zp;		
 			
-			//! Time-step scaled integral constant for quick calculation
+			//! @brief		Time-step scaled integral constant for quick calculation
 			dataType Zi;	
 			
-			//! Time-step scaled derivative constant for quick calculation
+			//! @brief		Time-step scaled derivative constant for quick calculation
 			dataType Zd;					
 			
-			//! Actual (non-scaled) proportional constant
+			//! @brief		Actual (non-scaled) proportional constant
 			dataType Kp;			
 			
-			//! Actual (non-scaled) integral constant
+			//! @brief		Actual (non-scaled) integral constant
 			dataType Ki;			
 			
-			//! Actual (non-scaled) derivative constant
+			//! @brief		Actual (non-scaled) derivative constant
 			dataType Kd;			
 			
-			//! Actual (non-scaled) proportional constant
+			//! @brief		Actual (non-scaled) proportional constant
 			dataType prevInput;			
 			
-			//! The change in input between the current and previous value
+			//! @brief		The change in input between the current and previous value
 			dataType inputChange;			
 	
 			//! @brief		The error between the set-point and actual output (set point - output, positive
@@ -181,6 +180,15 @@ namespace CP3id
 
 			//! @brief		The output mode (non-accumulating vs. accumulating) for the control loop.
 			outputMode_t outputMode;
+
+			#if(cp3id_config_INCLUDE_DEBUG_CODE == 1)
+				//! @brief		Callback function for debug printing. Callback must take a const char* as input
+				//!				and return void.
+				SlotMachine::Callback<void, const char*> debugPrintCallback;
+
+				//! @brief		Prints debug information to the desired output
+				void PrintDebugInfo(const char* msg);
+			#endif
 	};
 
 	//===============================================================================================//
@@ -299,9 +307,9 @@ namespace CP3id
 	      this->Zd = (0 - this->Zd);
 	   }
 
-		#if(pidPRINT_DEBUG == 1)
+		#if(cp3id_config_INCLUDE_DEBUG_CODE == 1)
 			snprintf(debugBuff, 
-				sizeof(debugBuff),
+				sizeof(debugBuff)/sizeof(debugBuff[0]),
 				"PID: Tuning parameters set. Kp = %.1f, Ki = %.1f, Kd = %f.1, "
 				"Zp = %.1f, Zi = %.1f, Zd = %.1f, with sample period = %.1fms\r\n",
 				Kp,
@@ -311,7 +319,7 @@ namespace CP3id
 				Zi,
 				Zd,
 				samplePeriodMs);
-			PrintDebug(debugBuff);
+			this->PrintDebugInfo(this->debugBuff);
 		#endif
 	}
 
@@ -378,16 +386,22 @@ namespace CP3id
 	   this->controllerDir = controllerDir;
 	}
 
-	template <class dataType> void Pid<dataType>::PrintDebug(const char* msg)
-	{
-		// Support for multiple platforms
-		#if(__linux)
-			printf("%s", (const char*)msg);
-		#endif
-	}
+	#if(cp3id_config_INCLUDE_DEBUG_CODE == 1)
+		template <class dataType> void Pid<dataType>::PrintDebugInfo(const char* msg)
+		{
+			// Execute the callback, passing in the message
+			this->debugPrintCallback.Execute(msg);
+		}
+
+		template <class dataType>
+		void Pid<dataType>::SetDebugPrintCallback(SlotMachine::Callback<void, const char*> debugPrintCallback)
+		{
+			this->debugPrintCallback = debugPrintCallback;
+		}
+	#endif
 
 } // namespace CP3id
 
-#endif // #ifndef PID_H
+#endif // #ifndef CP3ID_PID_H
 
 // EOF
