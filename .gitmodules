@@ -1,3 +1,3 @@
 [submodule "lib/slotmachine-cpp"]
 	path = lib/slotmachine-cpp
-	url = git@github.com:gbmhunter/slotmachine-cpp.git
+	url = https://github.com/gbmhunter/slotmachine-cpp.git

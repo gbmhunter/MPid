@@ -12,7 +12,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2014/03/24
-- Version: v3.1.1.0
+- Version: v3.1.2.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -107,6 +107,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.1.2.0 2014/03/24 Fixed the git submodule address for slotmachine-cpp so it was public, now TravisCI should be able to access it, closes #26. 
 v3.1.1.0 2014/03/24 Changed typedef enums into enum classes and added compiler flag -std=c++0x to Makefile, closes #18. Updated unit test file accordingly.
 v3.1.0.0 2014/03/24 Added include/Config.hpp to hold all PID configuration settings. Renamed debug print macros to fit. Added slotmachine-cpp lib to lib/slotmachine-cpp, added callback functionality for printing debug information, closes #25. Fixed incorrect checking of the size of the debug buffer, closes #24. Added relevant info to README.
 v3.0.2.0 2014/03/24 Renamed actualKp and associated variables to just Kp, as Zp is now used to describe the time-adjusted ones, closes #2. Added comment to example code in README. Pid::Run() now calculates pTerm correctly, closes #3. Fixed improper use of carat symbol in Pid::Run() bug, closes #23.
