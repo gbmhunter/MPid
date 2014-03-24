@@ -42,21 +42,23 @@ namespace CP3id
 			//===============================================================================================//
 			//=================================== PUBLIC TYPEDEFS ===========================================//
 			//===============================================================================================//
-			typedef enum			//!< Enumerates the controller direction modes
+
+			//! @brief		Enumerates the controller direction modes
+			enum class ControllerDirection
 			{
 				PID_DIRECT,			//!< Direct drive (+error gives +output)
 				PID_REVERSE			//!< Reverse driver (+error gives -output)
-			} ctrlDir_t;
+			};
 
-			//! Used to determine wether the output shouldn't be accumulated (distance control),
+			//! Used to determine whether the output shouldn't be accumulated (distance control),
 			//! or accumulated (velocity control).
-			typedef enum
+			enum class OutputMode
 			{
 				DONT_ACCUMULATE_OUTPUT,
 				ACCUMULATE_OUTPUT,
 				DISTANCE_PID = DONT_ACCUMULATE_OUTPUT,
 				VELOCITY_PID = ACCUMULATE_OUTPUT
-			} outputMode_t;
+			};
 		
 			//! @brief 		Init function
 			//! @details   	The parameters specified here are those for for which we can't set up 
@@ -65,8 +67,8 @@ namespace CP3id
 				dataType kp, 
 				dataType ki,
 				dataType kd, 
-				ctrlDir_t controllerDir,
-				outputMode_t outputMode,
+				ControllerDirection controllerDir,
+				OutputMode outputMode,
 				double samplePeriodMs, 
 				dataType minOutput,
 				dataType maxOutput, 
@@ -80,7 +82,7 @@ namespace CP3id
 		
 			//! @details	The PID will either be connected to a direct acting process (+error leads to +output, aka inputs are positive) 
 			//!				or a reverse acting process (+error leads to -output, aka inputs are negative)
-			void SetControllerDirection(ctrlDir_t controllerDir);
+			void SetControllerDirection(ControllerDirection controllerDir);
 			
 			//! @brief		Changes the sample time
 			void SetSamplePeriod(uint32_t newSamplePeriodMs);
@@ -176,10 +178,10 @@ namespace CP3id
 			uint32_t numTimesRan;
 
 			//! @brief		The controller direction (FORWARD or REVERSE).
-			ctrlDir_t controllerDir;
+			ControllerDirection controllerDir;
 
 			//! @brief		The output mode (non-accumulating vs. accumulating) for the control loop.
-			outputMode_t outputMode;
+			OutputMode outputMode;
 
 			#if(cp3id_config_INCLUDE_DEBUG_CODE == 1)
 				//! @brief		Callback function for debug printing. Callback must take a const char* as input
@@ -199,8 +201,8 @@ namespace CP3id
 		dataType kp, 
 		dataType ki,
 		dataType kd, 
-		ctrlDir_t controllerDir, 
-		outputMode_t outputMode, 
+		ControllerDirection controllerDir,
+		OutputMode outputMode,
 		double samplePeriodMs, 
 		dataType minOutput, 
 		dataType maxOutput, 
@@ -256,11 +258,11 @@ namespace CP3id
 		}
 
 		// Compute PID Output. Value depends on outputMode
-		if(this->outputMode == DONT_ACCUMULATE_OUTPUT)
+		if(this->outputMode == OutputMode::DONT_ACCUMULATE_OUTPUT)
 		{
 			this->output =  this->pTerm + this->iTerm + this->dTerm;
 		}
-		else if(this->outputMode == ACCUMULATE_OUTPUT)
+		else if(this->outputMode == OutputMode::ACCUMULATE_OUTPUT)
 		{
 			this->output = this->prevOutput + this->pTerm + this->iTerm + this->dTerm;
 		}
@@ -300,7 +302,7 @@ namespace CP3id
 	   this->Zi = ki * (dataType)(this->samplePeriodMs/1000.0);
 	   this->Zd = kd / (dataType)(this->samplePeriodMs/1000.0);
 	 
-	  if(this->controllerDir == PID_REVERSE)
+	  if(this->controllerDir == ControllerDirection::PID_REVERSE)
 	   {
 	      this->Zp = (0 - this->Zp);
 	      this->Zi = (0 - this->Zi);
@@ -374,7 +376,7 @@ namespace CP3id
 	 
 	}
 
-	template <class dataType> void Pid<dataType>::SetControllerDirection(ctrlDir_t controllerDir)
+	template <class dataType> void Pid<dataType>::SetControllerDirection(ControllerDirection controllerDir)
 	{
 		if(controllerDir != this->controllerDir)
 		{

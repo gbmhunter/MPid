@@ -30,12 +30,12 @@ TEST(ZpZiZdCorrectTest)
 		kp,									//!< Kp
 		ki,									//!< Ki
 		kd,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::VELOCITY_PID,		//!< Control type
-		timeStepMs,							//!< Update rate (ms)
-		0.0,									//!< Min output
-		100.0,								//!< Max output
-		0.0									//!< Initial set-point
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::VELOCITY_PID,		//!< Control type
+		timeStepMs,									//!< Update rate (ms)
+		0.0,										//!< Min output
+		100.0,										//!< Max output
+		0.0											//!< Initial set-point
 	);
 	
 	// Now check that Kp, Ki, and Kd were calculated correctly
@@ -59,8 +59,8 @@ TEST(ZeroInZeroOutTest)
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::VELOCITY_PID,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::VELOCITY_PID,		//!< Control type
 		10.0,									//!< Update rate (ms)
 		0.0,									//!< Min output
 		100.0,								//!< Max output
@@ -81,8 +81,8 @@ TEST(POnlyPositiveTest)
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -105,8 +105,8 @@ TEST(POnlyNegativeTest)
 		1.0,									//!< Kp
 		0.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -129,8 +129,8 @@ TEST(IOnlyPositiveTest)
 		0.0,									//!< Kp
 		10.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -159,8 +159,8 @@ TEST(IOnlyNegativeTest)
 		0.0,									//!< Kp
 		10.0,									//!< Ki
 		0.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -189,8 +189,8 @@ TEST(DOnlyPositiveTest)
 		0.0,									//!< Kp
 		0.0,									//!< Ki
 		1.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output
@@ -227,8 +227,8 @@ TEST(DOnlyNegativeTest)
 		0.0,									//!< Kp
 		0.0,									//!< Ki
 		1.0,									//!< Kd
-		Pid<double>::PID_DIRECT,		//!< Control type
-		Pid<double>::DONT_ACCUMULATE_OUTPUT,		//!< Control type
+		Pid<double>::ControllerDirection::PID_DIRECT,		//!< Control type
+		Pid<double>::OutputMode::DONT_ACCUMULATE_OUTPUT,		//!< Control type
 		1000.0,								//!< Update rate (ms)
 		-100.0,									//!< Min output
 		100.0,								//!< Max output

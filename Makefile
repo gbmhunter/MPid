@@ -40,7 +40,7 @@ SRC_DEP_FILES = $(SRC_CPP_FILES:.cpp=.d)
 # Linker flags
 SRC_LD_FLAGS :=
 # Compiler flags 
-SRC_CC_FLAGS := -Wall -g
+SRC_CC_FLAGS := -Wall -g -std=c++0x
 
 #--------------------
 # TEST CODE VARIABLES
@@ -48,7 +48,7 @@ SRC_CC_FLAGS := -Wall -g
 
 TEST_OBJ_FILES := $(patsubst %.cpp,%.o,$(wildcard test/*.cpp))
 TEST_LD_FLAGS := 
-TEST_CC_FLAGS := -Wall -g
+TEST_CC_FLAGS := -Wall -g -std=c++0x
 
 # Phony target
 .PHONY: depend clean
