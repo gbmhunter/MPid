@@ -139,13 +139,13 @@ namespace CP3id
 			dataType Zd;					
 			
 			//! Actual (non-scaled) proportional constant
-			dataType actualKp;			
+			dataType Kp;			
 			
 			//! Actual (non-scaled) integral constant
-			dataType actualKi;			
+			dataType Ki;			
 			
 			//! Actual (non-scaled) derivative constant
-			dataType actualKd;			
+			dataType Kd;			
 			
 			//! Actual (non-scaled) proportional constant
 			dataType prevInput;			
@@ -225,7 +225,11 @@ namespace CP3id
 		
 		this->error = this->setPoint - input;
 		
-		// Integral calcs
+		// PROPORTIONAL CALCS
+
+		this->pTerm = this->Zp*this->error;
+
+		// INTEGRAL CALCS
 		
 		this->iTerm += (this->Zi * this->error);
 		// Perform min/max bound checking on integral term
@@ -246,11 +250,11 @@ namespace CP3id
 		// Compute PID Output. Value depends on outputMode
 		if(this->outputMode == DONT_ACCUMULATE_OUTPUT)
 		{
-			this->output = this->Zp*this->error + this->iTerm + this->dTerm;
+			this->output =  this->pTerm + this->iTerm + this->dTerm;
 		}
 		else if(this->outputMode == ACCUMULATE_OUTPUT)
 		{
-			this->output = this->prevOutput + this->Zp*this->error + this->iTerm + this->dTerm;
+			this->output = this->prevOutput + this->pTerm + this->iTerm + this->dTerm;
 		}
 		
 		// Limit output
@@ -264,8 +268,9 @@ namespace CP3id
 		// Remember last output for next call
 		this->prevOutput = this->output;
 		  
-		// Increment the Run() counter.
-		if(this->numTimesRan < (2^(32))-1)
+		// Increment the Run() counter, after checking to make sure it hasn't reached
+		// max value.
+		if(this->numTimesRan < 0xFFFFFFFF)
 			this->numTimesRan++;
 	}
 
@@ -276,9 +281,9 @@ namespace CP3id
 		if (kp<0 || ki<0 || kd<0)
 	   		return;
 	 
-	   	this->actualKp = kp;
-		this->actualKi = ki;
-		this->actualKd = kd;
+	   	this->Kp = kp;
+		this->Ki = ki;
+		this->Kd = kd;
 	   
 	   // Calculate time-step-scaled PID terms
 	   this->Zp = kp;
@@ -299,9 +304,9 @@ namespace CP3id
 				sizeof(debugBuff),
 				"PID: Tuning parameters set. Kp = %.1f, Ki = %.1f, Kd = %f.1, "
 				"Zp = %.1f, Zi = %.1f, Zd = %.1f, with sample period = %.1fms\r\n",
-				actualKp,
-				actualKi,
-				actualKd,
+				Kp,
+				Ki,
+				Kd,
 				Zp,
 				Zi,
 				Zd,
@@ -312,17 +317,17 @@ namespace CP3id
 
 	template <class dataType> dataType Pid<dataType>::GetKp()
 	{
-		return this->actualKp;
+		return this->Kp;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetKi()
 	{
-		return this->actualKi;
+		return this->Ki;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetKd()
 	{
-		return this->actualKd;
+		return this->Kd;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetZp()
