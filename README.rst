@@ -1,6 +1,10 @@
-============================
+=====
+CP3id
+=====
+
+----------------------------
 Embedded PID Control Library
-============================
+----------------------------
 
 .. image:: https://travis-ci.org/gbmhunter/CP3id.png?branch=master   
 	:target: https://travis-ci.org/gbmhunter/CP3id
@@ -8,7 +12,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2014/03/24
-- Version: v3.0.0.0
+- Version: v3.0.1.0
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -95,6 +99,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.0.1.0 2014/03/24 Added this keyword to Init() function (and others) to prevent self-assignment bug, closes #19. Removed all references of the fixed-point library, now that the library accepts a dynamic data type, closes #20. Changed namespace from PidNs to CP3id, closes #22. Add more comments to PID functions. Updated README project title.
 v3.0.0.0 2014/03/24 Moved src/include/ to include/. Added Eclipse C++ project files. Added api/CP3id.hpp, which is a single file you can include to use the CP3id library.
 v2.5.1.0 2013/08/29 Cleaned up Makefile.
 v2.5.0.1 2013/08/29 Fixed broken Travis CI build status image in README.

@@ -23,8 +23,6 @@
 //================================== PRECOMPILER CHECKS =========================================//
 //===============================================================================================//
 
-#define pidENABLE_FP_SUPPORT 0
-
 //! @brief		Set to 1 if you want debug information printed
 #define pidPRINT_DEBUG			0
 
@@ -36,21 +34,17 @@
 //======================================== NAMESPACE ============================================//
 //===============================================================================================//
 
-#if(pidENABLE_FP_SUPPORT == 1)
-	#include "./FixedPoint/include/Fp.h"
-#endif
-
 #include <stdint.h>		// uint32_t
 #include <stdio.h>		// snprintf
 
-namespace PidNs
+namespace CP3id
 {
 	
-	//! @brief		Base PID class. 
-	class PidDataBase
+	//! @brief		PID class that uses dataTypes for it's arithmetic
+	template <class dataType> class Pid
 	{
-	
 		public:
+
 			//===============================================================================================//
 			//=================================== PUBLIC TYPEDEFS ===========================================//
 			//===============================================================================================//
@@ -69,15 +63,6 @@ namespace PidNs
 				DISTANCE_PID = DONT_ACCUMULATE_OUTPUT,
 				VELOCITY_PID = ACCUMULATE_OUTPUT
 			} outputMode_t;
-		
-			ctrlDir_t controllerDir;
-			outputMode_t outputMode;	//!< The output mode (non-accumulating vs. accumulating) for the control loop
-	};
-	
-	//! @brief		PID class that uses dataTypes for it's arithmetic
-	template <class dataType> class Pid : public PidDataBase
-	{
-		public:
 		
 			//! @brief 		Init function
 			//! @details   	The parameters specified here are those for for which we can't set up 
@@ -111,16 +96,22 @@ namespace PidNs
 			//! 			be adjusted on the fly during normal operation
 			void SetTunings(dataType kp, dataType ki, dataType kd);
 
+			//! @brief		Returns the actual (not time-scaled) proportional constant.
 			dataType GetKp();
 
+			//! @brief		Returns the actual (not time-scaled) integral constant.
 			dataType GetKi();
 
+			//! @brief		Returns the actual (not time-scaled) derivative constant.
 			dataType GetKd();
 
+			//! @brief		Returns the time-scaled (dependent on sample period) proportional constant.
 			dataType GetZp();
 
+			//! @brief		Returns the time-scaled (dependent on sample period) integral constant.
 			dataType GetZi();
 
+			//! @brief		Returns the time-scaled (dependent on sample period) derivative constant.
 			dataType GetZd();
 
 			//! @brief		Prints debug information to the desired output
@@ -162,8 +153,9 @@ namespace PidNs
 			//! The change in input between the current and previous value
 			dataType inputChange;			
 	
-			dataType error;				//!< The error between the set-point and actual output (set point - output, positive
-											//!< when actual output is lagging set-point
+			//! @brief		The error between the set-point and actual output (set point - output, positive
+			//! 			when actual output is lagging set-point.
+			dataType error;
 			
 			//! @brief 		The output value calculated the previous time Pid_Run() was called.
 			//! @details	Used in ACCUMULATE_OUTPUT mode.
@@ -183,7 +175,17 @@ namespace PidNs
 			//!				derivative control from influencing the output on the first call.
 			//! @details	Safely stops counting once it reaches 2^32-1 (rather than overflowing). 
 			uint32_t numTimesRan;
+
+			//! @brief		The controller direction (FORWARD or REVERSE).
+			ctrlDir_t controllerDir;
+
+			//! @brief		The output mode (non-accumulating vs. accumulating) for the control loop.
+			outputMode_t outputMode;
 	};
+
+	//===============================================================================================//
+	//============================ TEMPLATE FUNCTION DEFINITIONS ====================================//
+	//===============================================================================================//
 
 	template <class dataType> void Pid<dataType>::Init(
 		dataType kp, 
@@ -197,22 +199,22 @@ namespace PidNs
 		dataType setPoint)
 	{
 
-		SetOutputLimits(minOutput, maxOutput);		
+		this->SetOutputLimits(minOutput, maxOutput);
 
 		this->samplePeriodMs = samplePeriodMs;
 
-	   SetControllerDirection(controllerDir);
-		outputMode = outputMode;
+		this->SetControllerDirection(controllerDir);
+		this->outputMode = outputMode;
 		
 		// Set tunings with provided constants
-	   SetTunings(kp, ki, kd);
-		setPoint = setPoint;
-		prevInput = 0;
-		prevOutput = 0;
+		this->SetTunings(kp, ki, kd);
+		this->setPoint = setPoint;
+		this->prevInput = 0;
+		this->prevOutput = 0;
 
-		pTerm = 0.0;
-		iTerm = 0.0;
-		dTerm = 0.0;
+		this->pTerm = 0.0;
+		this->iTerm = 0.0;
+		this->dTerm = 0.0;
 			
 	}
 
@@ -221,73 +223,75 @@ namespace PidNs
 		// Compute all the working error variables
 		//dataType input = *_input;
 		
-		error = setPoint - input;
+		this->error = this->setPoint - input;
 		
 		// Integral calcs
 		
-		iTerm += (Zi * error);
+		this->iTerm += (this->Zi * this->error);
 		// Perform min/max bound checking on integral term
-		if(iTerm > outMax) 
-			iTerm = outMax;
-		else if(iTerm < outMin)
-			iTerm = outMin;
+		if(this->iTerm > this->outMax)
+			this->iTerm = this->outMax;
+		else if(this->iTerm < this->outMin)
+			this->iTerm = this->outMin;
 
 		// DERIVATIVE CALS
 
 		// Only calculate derivative if run once or more already.
-		if(numTimesRan > 0)
+		if(this->numTimesRan > 0)
 		{
-			inputChange = (input - prevInput);
-			dTerm = -Zd*inputChange;
+			this->inputChange = (input - this->prevInput);
+			this->dTerm = -this->Zd*this->inputChange;
 		}
 
 		// Compute PID Output. Value depends on outputMode
-		if(outputMode == DONT_ACCUMULATE_OUTPUT)
+		if(this->outputMode == DONT_ACCUMULATE_OUTPUT)
 		{
-			output = Zp*error + iTerm + dTerm;
+			this->output = this->Zp*this->error + this->iTerm + this->dTerm;
 		}
-		else if(outputMode == ACCUMULATE_OUTPUT)
+		else if(this->outputMode == ACCUMULATE_OUTPUT)
 		{
-			output = prevOutput + Zp*error + iTerm + dTerm;
+			this->output = this->prevOutput + this->Zp*this->error + this->iTerm + this->dTerm;
 		}
 		
 		// Limit output
-		if(output > outMax) 
-			output = outMax;
-		else if(output < outMin)
-			output = outMin;
+		if(this->output > this->outMax)
+			this->output = this->outMax;
+		else if(this->output < this->outMin)
+			this->output = this->outMin;
 		
 		// Remember input value to next call
-		prevInput = input;
+		this->prevInput = input;
 		// Remember last output for next call
-		prevOutput = output;
+		this->prevOutput = this->output;
 		  
 		// Increment the Run() counter.
-		if(numTimesRan < (2^(32))-1)
-			numTimesRan++;
+		if(this->numTimesRan < (2^(32))-1)
+			this->numTimesRan++;
 	}
 
+	//! @brief		Sets the PID tunings.
+	//! @warning	Make sure samplePeriodMs is set before calling this funciton.
 	template <class dataType> void Pid<dataType>::SetTunings(dataType kp, dataType ki, dataType kd)
 	{
-	   	if (kp<0 || ki<0 || kd<0) 
+		if (kp<0 || ki<0 || kd<0)
 	   		return;
 	 
-	 	actualKp = kp; 
-		actualKi = ki;
-		actualKd = kd;
+	   	this->actualKp = kp;
+		this->actualKi = ki;
+		this->actualKd = kd;
 	   
 	   // Calculate time-step-scaled PID terms
-	   Zp = kp;
+	   this->Zp = kp;
 
 		// The next bit requires double->dataType casting functionality.
-	   Zi = ki * (dataType)(samplePeriodMs/1000.0);
-	   Zd = kd / (dataType)(samplePeriodMs/1000.0);
+	   this->Zi = ki * (dataType)(this->samplePeriodMs/1000.0);
+	   this->Zd = kd / (dataType)(this->samplePeriodMs/1000.0);
 	 
-	  if(controllerDir == PID_REVERSE)
+	  if(this->controllerDir == PID_REVERSE)
 	   {
-	      Zp = (0 - Zp);
-	      Zi = (0 - Zi);
-	      Zd = (0 - Zd);
+	      this->Zp = (0 - this->Zp);
+	      this->Zi = (0 - this->Zi);
+	      this->Zd = (0 - this->Zd);
 	   }
 
 		#if(pidPRINT_DEBUG == 1)
@@ -308,32 +312,32 @@ namespace PidNs
 
 	template <class dataType> dataType Pid<dataType>::GetKp()
 	{
-		return actualKp;
+		return this->actualKp;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetKi()
 	{
-		return actualKi;
+		return this->actualKi;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetKd()
 	{
-		return actualKd;
+		return this->actualKd;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetZp()
 	{
-		return Zp;
+		return this->Zp;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetZi()
 	{
-		return Zi;
+		return this->Zi;
 	}
 
 	template <class dataType> dataType Pid<dataType>::GetZd()
 	{
-		return Zd;
+		return this->Zd;
 	}
 	
 	template <class dataType> void Pid<dataType>::SetSamplePeriod(uint32_t newSamplePeriodMs)
@@ -341,10 +345,10 @@ namespace PidNs
 	   if (newSamplePeriodMs > 0)
 	   {
 	      dataType ratio  = (dataType)newSamplePeriodMs
-	                      / (double)samplePeriodMs;
-	      Zi *= ratio;
-	      Zd /= ratio;
-	      samplePeriodMs = newSamplePeriodMs;
+	                      / (double)this->samplePeriodMs;
+	      this->Zi *= ratio;
+	      this->Zd /= ratio;
+	      this->samplePeriodMs = newSamplePeriodMs;
 	   }
 	}
 
@@ -352,21 +356,21 @@ namespace PidNs
 	{
 		if(min >= max) 
 	   		return;
-	   	outMin = min;
-	   	outMax = max;
+	   	this->outMin = min;
+	   	this->outMax = max;
 	 
 	}
 
 	template <class dataType> void Pid<dataType>::SetControllerDirection(ctrlDir_t controllerDir)
 	{
-		if(controllerDir != controllerDir)
+		if(controllerDir != this->controllerDir)
 		{
 	   		// Invert control constants
-			Zp = (0 - Zp);
-	    	Zi = (0 - Zi);
-	    	Zd = (0 - Zd);
+			this->Zp = (0 - Zp);
+	    	this->Zi = (0 - Zi);
+	    	this->Zd = (0 - Zd);
 		}   
-	   controllerDir = controllerDir;
+	   this->controllerDir = controllerDir;
 	}
 
 	template <class dataType> void Pid<dataType>::PrintDebug(const char* msg)
@@ -377,7 +381,7 @@ namespace PidNs
 		#endif
 	}
 
-} // namespace Pid
+} // namespace CP3id
 
 #endif // #ifndef PID_H
 

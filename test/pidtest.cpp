@@ -13,7 +13,7 @@
 // UnitTest++ library
 #include "UnitTest++/src/UnitTest++.h"
 
-using namespace PidNs;
+using namespace CP3id;
 
 
 TEST(ZpZiZdCorrectTest)
