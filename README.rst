@@ -11,8 +11,8 @@ Embedded PID Control Library
 	
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
-- Last Modified: 2014/03/24
-- Version: v3.1.2.0
+- Last Modified: 2014/04/16
+- Version: v3.1.2.1
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -64,6 +64,7 @@ Usage
 -----
 
 ::
+
 	// Create a PID object which uses double for all of it's calculations, inputs, and outputs.
 	Pid<double> pidTest;
 
@@ -93,7 +94,7 @@ Usage
 		// Set output
 		SetPin(3) = pidTest.output;
 	}
-	
+
 See test/PidTest.cpp for more examples.
 	
 Issues
@@ -107,6 +108,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.1.2.1 2014/04/16 Attempt to fix identation issue in 'Usage' section of README, closes #28.
 v3.1.2.0 2014/03/24 Fixed the git submodule address for slotmachine-cpp so it was public, now TravisCI should be able to access it, closes #26. 
 v3.1.1.0 2014/03/24 Changed typedef enums into enum classes and added compiler flag -std=c++0x to Makefile, closes #18. Updated unit test file accordingly.
 v3.1.0.0 2014/03/24 Added include/Config.hpp to hold all PID configuration settings. Renamed debug print macros to fit. Added slotmachine-cpp lib to lib/slotmachine-cpp, added callback functionality for printing debug information, closes #25. Fixed incorrect checking of the size of the debug buffer, closes #24. Added relevant info to README.
