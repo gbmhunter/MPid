@@ -12,7 +12,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2014/04/16
-- Version: v3.1.2.1
+- Version: v3.1.2.2
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -23,6 +23,9 @@ Embedded PID Control Library
 - Documentation Format: Doxygen
 - License: GPLv3
 
+.. role:: bash(code)
+	:language: bash
+
 Description
 -----------
 
@@ -32,33 +35,35 @@ A light-weight, fast PID library designed for use on embedded systems (but can a
 
 For better performance and control, the PID library supports a generic number type. Number type must support casting to doubles. Fixed-point numbers are recommended for high-speed operation, doubles are recommended for non-time critical algorithms.
 
-Relies on used calling `Pid.Run()` at a regular and fixed interval (usually in the milli-second range, via an interrupt).
+Relies on used calling :code:`Pid.Run()` at a regular and fixed interval (usually in the milli-second range, via an interrupt).
 
-Automatically adjusts Kp, Ki and Kd depending on the chosen time step (Zp, Zi, and Zd are the time-step adjusted values).
+Automatically adjusts :code:`Kp`, :code:`Ki` and :code:`Kd` depending on the chosen time step (:code:`Zp`, :code:`Zi`, and :code:`Zd` are the time-step adjusted values).
 
-**DO NOT** try and make Kp, Ki, or Kd negative. This results in undefined behaviour.
+**DO NOT** try and make :code:`Kp`, :code:`Ki`, or :code:`Kd` negative. This results in undefined behaviour.
 
 Smooth Control
 --------------
 
-Derivative control is only active when at least two calls to `Run()` have been made (does not assume previous input was 0 on first call, which can cause a huge derivative jolt!).
+Derivative control is only active when at least two calls to :code:`Run()` have been made (does not assume previous input was 0 on first call, which can cause a huge derivative jolt!).
 
 Easy Debugging
 --------------
 
-You can print PID debug information by providing a callback via `Pid::SetDebugPrintCallback()`, which supports method callbacks by utilizing the slotmachine-cpp library. 
+You can print PID debug information by providing a callback via :code:`Pid::SetDebugPrintCallback()`, which supports method callbacks by utilizing the slotmachine-cpp library. 
 
-You can disable all debug info (to free up some memory space) by setting `cp3id_config_INCLUDE_DEBUG_CODE` in `include/Config.hpp` to `0`. The debug buffer size can be changed with `cp3id_config_DEBUG_BUFF_SIZE`, again in `Config.hpp`.
+You can disable all debug info (to free up some memory space) by setting :code:`cp3id_config_INCLUDE_DEBUG_CODE` in `include/Config.hpp` to `0`. The debug buffer size can be changed with `cp3id_config_DEBUG_BUFF_SIZE`, again in `Config.hpp`.
 
-Internal Dependencies
----------------------
-	
-- UnitTest++ (test/UnitTest++). Lightweight C++ library for unit testing.
-		
-External Dependencies
----------------------
+Dependencies
+------------
 
-- FixedPoint library. Required if you want to use fixed-point number types with the PID control loops.
+====================== ==================== ======================================================================
+Dependency             Delivery             Usage
+====================== ==================== ======================================================================
+<cstdint>              Standard C++ library Fixed-width variable type definitions (e.g. uint32_t).
+UnitTest++             /lib/UnitTest++      Unit test framework (test code in ./test/).
+slotmachine-cpp        /lib/slotmachine-cpp Callback support for debug and error messages.
+====================== ==================== ======================================================================
+
 
 Usage
 -----
@@ -108,6 +113,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.1.2.2 2014/04/16 Properly styled code in README, closes #29. Added slotmachine-cpp to list of dependencies in README, closes #27.
 v3.1.2.1 2014/04/16 Attempt to fix identation issue in 'Usage' section of README, closes #28.
 v3.1.2.0 2014/03/24 Fixed the git submodule address for slotmachine-cpp so it was public, now TravisCI should be able to access it, closes #26. 
 v3.1.1.0 2014/03/24 Changed typedef enums into enum classes and added compiler flag -std=c++0x to Makefile, closes #18. Updated unit test file accordingly.
