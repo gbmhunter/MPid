@@ -12,7 +12,7 @@ Embedded PID Control Library
 - Author: gbmhunter <gbmhunter@gmail.com> (http://www.cladlab.com)
 - Created: 2012/10/01
 - Last Modified: 2014/04/16
-- Version: v3.1.2.2
+- Version: v3.1.2.3
 - Company: CladLabs
 - Project: n/a
 - Language: C++
@@ -51,7 +51,24 @@ Easy Debugging
 
 You can print PID debug information by providing a callback via :code:`Pid::SetDebugPrintCallback()`, which supports method callbacks by utilizing the slotmachine-cpp library. 
 
-You can disable all debug info (to free up some memory space) by setting :code:`cp3id_config_INCLUDE_DEBUG_CODE` in `include/Config.hpp` to `0`. The debug buffer size can be changed with `cp3id_config_DEBUG_BUFF_SIZE`, again in `Config.hpp`.
+The following code shows you how to assign a callback for debug printing. ::
+
+	class Printer
+	{
+		public:
+			void PrintDebug(const char* msg)
+			{
+				std::cout << msg;
+			}
+	};
+
+	Printer myPrinter;
+	Pid pidTest;
+
+	// Asign callback to Printer's PrintDebug function.
+	this->pidTest.SetDebugPrintCallback(SlotMachine::CallbackGen<Printer, void, const char*>(&myPrinter, &Printer::PrintDebug));
+
+You can disable all debug info (to free up some memory space) by setting :code:`cp3id_config_INCLUDE_DEBUG_CODE` in :code:`include/Config.hpp` to :code:`0`. The debug buffer size can be changed with :code:`cp3id_config_DEBUG_BUFF_SIZE`, again in :code:`Config.hpp`.
 
 Dependencies
 ------------
@@ -113,6 +130,7 @@ Changelog
 ======== ========== ===================================================================================================
 Version  Date       Comment
 ======== ========== ===================================================================================================
+v3.1.2.3 2014/04/16 Fixed up some code styling in the README. Added code example for assiging callback for debug printing, closes #30.
 v3.1.2.2 2014/04/16 Properly styled code in README, closes #29. Added slotmachine-cpp to list of dependencies in README, closes #27.
 v3.1.2.1 2014/04/16 Attempt to fix identation issue in 'Usage' section of README, closes #28.
 v3.1.2.0 2014/03/24 Fixed the git submodule address for slotmachine-cpp so it was public, now TravisCI should be able to access it, closes #26. 
