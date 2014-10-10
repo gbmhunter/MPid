@@ -1,9 +1,9 @@
 //!
 //! @file 			Pid.cpp
-//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (wwww.cladlab.com)
+//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (wwww.mbedded.ninja)
 //! @edited 		n/a
-//! @created		2012/11/09
-//! @last-modified 	2014/03/24
+//! @created		2012-11-09
+//! @last-modified 	2014-10-10
 //! @brief 			PID library for embedded systems, written in C++.
 //! @details
 //!					See README.rst in repo root dir for more info.
@@ -21,12 +21,12 @@
 //========================================= INCLUDES ============================================//
 //===============================================================================================//
 
-// GCC
+//===== SYSTEM LIBRARIES =====//
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-// User
+//===== USER SOURCE =====//
 #include "../include/Pid.hpp"
 
 //===============================================================================================//
@@ -39,11 +39,15 @@
 //======================================== NAMESPACE ============================================//
 //===============================================================================================//
 
-namespace CP3id
+namespace MbeddedNinja
 {
+	namespace MPidNs
+	{
 
-	// All PID code in Pid.h (templates)
+		// All PID code in Pid.hpp (templates)
 
-} // namespace Pid
+	} // namespace MPidNs
+
+} // namespace MbeddedNinja
 
 // EOF

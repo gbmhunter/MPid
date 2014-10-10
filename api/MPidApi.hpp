@@ -1,10 +1,10 @@
 //!
-//! @file 			CP3id.h
-//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.cladlab.com)
+//! @file 			MPidApi.hpp
+//! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.mbedded.ninja)
 //! @edited 		n/a
-//! @created		2014/03/24
-//! @last-modified 	2014/03/24
-//! @brief 			API header file for the CP3id library.
+//! @created		2014-03-24
+//! @last-modified 	2014-03-24
+//! @brief 			API header file for the MPid module.
 //! @details
 //!					See README.rst in repo root dir for more info.
 
@@ -17,11 +17,11 @@
 	#error Please build with C++ compiler
 #endif
 
-#ifndef CP3ID_H
-#define CP3ID_H
+#ifndef M_PID_M_PID_API_H
+#define M_PID_M_PID_API_H
 
 #include "../include/Pid.hpp"
 
-#endif // #ifndef CP3ID_H
+#endif // #ifndef M_PID_M_PID_API_H
 
 // EOF
