@@ -11,8 +11,8 @@ A microcontroller-friendly PID module.
 	
 - Author: gbmhunter <gbmhunter@gmail.com> (www.mbedded.ninja)
 - Created: 2012-10-01
-- Last Modified: 2014-10-10
-- Version: v4.0.0.0
+- Last Modified: 2014-10-11
+- Version: v4.0.1.0
 - Company: mbedded.ninja
 - Project: MToolkit module
 - Language: C++
@@ -128,6 +128,7 @@ Changelog
 ========= ========== ===================================================================================================
 Version   Date       Comment
 ========= ========== ===================================================================================================
+v4.0.1.0  2014-10-11 Updated .travis.yml file to support C++11, closes #40.
 v4.0.0.0  2014-10-10 Replaced UnitTest++ with the MUnitTest module, closes #32. Changed name to MPid, closes #31. Wrapped all code in MbeddedNinja namespace, closes #33. Removed slotmachine-cpp from 'lib/', closes #34. Updated Makefile to be similar to all of the other MToolkit modules, closes #35. Added main.cpp file for tests, closes #36. Moved all Pid::Init() code to constructor, closes #37.
 v3.1.2.3  2014-04-16 Fixed up some code styling in the README. Added code example for assiging callback for debug printing, closes #30.
 v3.1.2.2  2014-04-16 Properly styled code in README, closes #29. Added slotmachine-cpp to list of dependencies in README, closes #27.
