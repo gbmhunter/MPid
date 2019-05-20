@@ -6,12 +6,12 @@ MPid
 A microcontroller-friendly PID module.
 --------------------------------------
 
-.. image:: https://travis-ci.org/mbedded-ninja/MPid.png?branch=master   
-	:target: https://travis-ci.org/mbedded-ninja/MPid
+.. image:: https://travis-ci.org/gbmhunter/MPid.png?branch=master   
+	:target: https://travis-ci.org/gbmhunter/MPid
 	
 - Author: gbmhunter <gbmhunter@gmail.com> (www.mbedded.ninja)
 - Created: 2012-10-01
-- Last Modified: 2014-10-11
+- Last Modified: 2019-05-20
 - Version: v4.0.1.0
 - Company: mbedded.ninja
 - Project: MToolkit module
