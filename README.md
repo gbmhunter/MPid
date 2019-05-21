@@ -45,13 +45,13 @@ You can disable all debug info (to free up some memory space) by setting `cp3id_
 
 ## Code Dependencies
 
-====================== ==================== ======================================================================
-Dependency             Delivery             Usage
-====================== ==================== ======================================================================
-`<cstdint>`            Standard C++ library Fixed-width variable type definitions (e.g. `uint32_t`).
-MAssert                External module      Providing runtime safety checks against this module.
-MUnitTest              External module      Framework for unit tests.
-====================== ==================== ======================================================================
+
+| Dependency          |   Delivery            | Usage
+|---------------------|-----------------------|--------------------------------------------
+| `<cstdint>`         |  Standard C++ library | Fixed-width variable type definitions (e.g. `uint32_t`).
+| MAssert             |  External module      | Providing runtime safety checks against this module.
+| MUnitTest           |  External module      | Framework for unit tests.
+
 
 ## Building
 
