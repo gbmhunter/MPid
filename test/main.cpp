@@ -2,7 +2,7 @@
 //! @file 			main.cpp
 //! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.mbedded.ninja)
 //! @created		2014-08-12
-//! @last-modified 	2014-09-13
+//! @last-modified 	2019-05-20
 //! @brief 			Contains main entry point for unit tests.
 //! @details
 //!					See README.rst in root dir for more info.
@@ -11,7 +11,7 @@
 // none
 
 //====== USER LIBRARIES =====//
-#include "MUnitTest/api/MUnitTestApi.hpp"
+#include "MUnitTest/MUnitTestApi.hpp"
 
 //===== USER SOURCE =====//
 // none

@@ -1,9 +1,9 @@
 //!
-//! @file 			BasicTesta.cpp
+//! @file 			BasicTests.cpp
 //! @author 		Geoffrey Hunter <gbmhunter@gmail.com> (www.mbedded.ninja)
 //! @edited 		n/a
 //! @created		2013-05-27
-//! @last-modified 	2014-10-10
+//! @last-modified 	2019-05-20
 //! @brief 			Unit test file for MPid library.
 //! @details
 //!					See README.rst in repo root dir for more info.
@@ -12,7 +12,7 @@
 //#include <iostream>	//! @debug
 
 //====== USER LIBRARIES =====//
-#include "MUnitTest/api/MUnitTestApi.hpp"
+#include "MUnitTest/MUnitTestApi.hpp"
 
 //===== USER SOURCE =====//
 #include "../api/MPidApi.hpp"
