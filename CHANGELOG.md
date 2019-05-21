@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Replaced Make build script with CMake.
 - Replace the custom four number versioning with the standarized semantic verioning (three number).
+- Changed README from ReStructuredText to Markdown format.
 
 ## Old Style Changelog (pre v5.0.0)
 
